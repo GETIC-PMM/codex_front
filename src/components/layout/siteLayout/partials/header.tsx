@@ -1,9 +1,9 @@
-import { Button } from "../ui/button";
+import { Button } from "../../../ui/button";
 import DiretiLogo from "@/assets/diretiLogo.svg";
 
 const Header = () => {
   return (
-    <div className="flex justify-between w-full px-40 py-5">
+    <div className="flex justify-between w-full py-5">
       <div className="flex gap-10">
         <img src={DiretiLogo} width={250} alt="Direti Logo" />
 
