@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        pmmGray: '#8E97A0',
+        pmmBlue: '#1A68B2',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
