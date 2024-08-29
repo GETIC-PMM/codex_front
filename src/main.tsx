@@ -1,21 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Homepage from "./pages/homepage.tsx";
-import SiteLayout from "./components/layout/siteLayout/siteLayout.tsx";
-
-const router = createBrowserRouter([
-  {
-    element: <SiteLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Homepage />,
-      },
-    ],
-  },
-]);
+import { RouterProvider } from "react-router-dom";
+import { router } from "./utils/routes.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
