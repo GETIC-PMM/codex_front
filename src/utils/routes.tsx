@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import SiteLayout from "@/components/layout/siteLayout/siteLayout";
 import Homepage from "@/pages/homepage";
+import Busca from "@/pages/busca";
 
 export const router = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Homepage />,
       },
+      {
+        path: "/busca",
+        element: <Busca />,
+      }
     ],
   },
 ]);
