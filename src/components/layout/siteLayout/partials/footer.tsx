@@ -1,5 +1,6 @@
 import DiretiLogoWhite from "@/assets/diretiLogoWhite.svg";
 import { Button } from "@/components/ui/button";
+import { maxWidth } from "@/utils/consts";
 import { CiMail } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import { PiPhoneCallLight } from "react-icons/pi";
@@ -8,7 +9,9 @@ const Footer = () => {
   // always on bottom
   return (
     <footer className="w-full bg-pmmBlue text-white pt-24 pb-8 mt-10">
-      <div className="w-full max-w-[1200px] mx-auto flex items-center justify-between  gap-36 text-sm">
+      <div
+        className={`w-full max-w-[1200px] mx-auto flex items-center justify-between  gap-36 text-sm`}
+      >
         <div className="flex-[2] flex flex-col gap-7">
           <img src={DiretiLogoWhite} width={250} alt="Direti Logo" />
           <p className="max-w-[600px]">

@@ -1,0 +1,46 @@
+import React from "react";
+import { AiFillHome } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+
+const Navbar = ({
+  setIsNavbarExpanded,
+  isNavbarExpanded,
+}: {
+  setIsNavbarExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  isNavbarExpanded: boolean;
+}) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className={`z-20 transition-all top-16 fixed left-0 bg-pmmBlue text-white py-1 text-sm h-full w-0 md:w-12 pb-24 ${
+        isNavbarExpanded
+          ? "md:w-56 w-56 overflow-scroll"
+          : "md:w-12 w-0 md:left-0 overflow-clip"
+      }`}
+      onMouseEnter={() => setIsNavbarExpanded(true)}
+      onMouseLeave={() => setIsNavbarExpanded(false)}
+    >
+      <div className="w-full h-[2px]">
+        <button
+          onClick={() => {
+            navigate("/admin/dashboard");
+          }}
+          className={`flex items-center py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
+        >
+          <div
+            className={`p-4 items-center  ${
+              isNavbarExpanded ? "md:flex" : "md:flex hidden"
+            }`}
+          >
+            <AiFillHome className="fill-white w-4 h-4" />
+          </div>
+          {isNavbarExpanded && <div>Home</div>}
+        </button>
+      </div>
+      <div className="h-14"></div>
+    </div>
+  );
+};
+
+export default Navbar;
