@@ -19,6 +19,11 @@ export type GetCategoriasTYPE = {
   titulo: string;
 };
 
+export type GetTagsTYPE = {
+  id: string;
+  titulo: string;
+};
+
 export const customStyles: TableStyles = {
   headCells: {
     style: {

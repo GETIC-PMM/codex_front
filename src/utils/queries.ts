@@ -21,3 +21,13 @@ export const useGetCategorias = () =>
     },
     refetchOnWindowFocus: false,
   });
+
+export const useGetTags = () =>
+  useQuery({
+    queryKey: ["tags"],
+    queryFn: async () => {
+      const { data } = await axios.get(API_URL + "/tags");
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });

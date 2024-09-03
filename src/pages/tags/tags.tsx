@@ -3,16 +3,8 @@ import FourRectanglesIcon from "@/components/icons/FourRectanglesIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import DataTableBase from "@/components/partials/datatable";
 import DefaultModal from "@/components/partials/defaultModal";
+import DeleteModal from "@/components/partials/deleteModal";
 import { Button } from "@/components/ui/button";
-import { API_URL_ADMIN } from "@/utils/consts";
-import { useGetCategorias } from "@/utils/queries";
-import { GetCategoriasTYPE, ModalActions } from "@/utils/types";
-import { useMutation } from "react-query";
-import axios from "axios";
-import { useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FormControl,
   FormField,
@@ -21,33 +13,40 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import DeleteModal from "@/components/partials/deleteModal";
-import { toast } from "sonner";
+import { API_URL_ADMIN } from "@/utils/consts";
+import { useGetTags } from "@/utils/queries";
+import { GetTagsTYPE, ModalActions } from "@/utils/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import { z } from "zod";
 
 const formSchema = z.object({
   id: z.string().optional(),
   titulo: z.string(),
 });
 
-const Categorias = () => {
+const Tags = () => {
+  const tags = useGetTags();
   const [modal, setModal] = useState<ModalActions>("");
-  const categorias = useGetCategorias();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  // console.log({ erros: form.formState.errors });
-  // console.log({ values: form.getValues() });
+  console.log({ erros: form.formState.errors });
+  console.log({ values: form.getValues() });
 
   const columns = [
     {
-      name: <b>Titulo</b>,
-      selector: (row: GetCategoriasTYPE) => row.titulo ?? "-",
+      name: <>Titulo</>,
+      selector: (row: GetTagsTYPE) => row.titulo ?? "-",
       sortable: true,
     },
 
     {
-      cell: (row: GetCategoriasTYPE) => (
+      cell: (row: GetTagsTYPE) => (
         <div className="flex flex-row justify-center items-center p-2 gap-2">
           <Button
             variant="alert"
@@ -80,7 +79,7 @@ const Categorias = () => {
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
         <FourRectanglesIcon />
-        <b className="text-pmmBlue">Categorias</b>
+        <b className="text-pmmBlue">Tags</b>
       </div>
       <Button
         size="sm"
@@ -95,41 +94,38 @@ const Categorias = () => {
   );
 
   const create = useMutation(
-    async (data: Omit<GetCategoriasTYPE, "id">) => {
-      await axios.post(`${API_URL_ADMIN}/categorias`, data, {});
+    async (data: Omit<GetTagsTYPE, "id">) => {
+      await axios.post(`${API_URL_ADMIN}/tags`, data, {});
     },
     {
       onSuccess: () => {
         setModal("");
-        categorias.refetch();
+        tags.refetch();
       },
     }
   );
 
   const edit = useMutation(
-    async (data: GetCategoriasTYPE) => {
-      await axios.put(`${API_URL_ADMIN}/categorias/${data.id}`, data, {});
+    async (data: GetTagsTYPE) => {
+      await axios.put(`${API_URL_ADMIN}/tags/${data.id}`, data, {});
     },
     {
       onSuccess: () => {
         setModal("");
-        categorias.refetch();
+        tags.refetch();
       },
     }
   );
 
   const deleteData = useMutation(
     async (id: string) => {
-      const { data } = await axios.delete(
-        `${API_URL_ADMIN}/categorias/${id}`,
-        {}
-      );
+      const { data } = await axios.delete(`${API_URL_ADMIN}/tags/${id}`, {});
       return data;
     },
     {
       onSuccess: () => {
         setModal("");
-        categorias.refetch();
+        tags.refetch();
       },
     }
   );
@@ -149,13 +145,12 @@ const Categorias = () => {
         isError={deleteData.isError}
         isLoading={deleteData.isLoading}
       />
-
       <DefaultModal
         onSubmit={onSubmit}
         form={form}
         open={modal}
         setOpen={setModal}
-        title={`${modal === "create" ? "Adicionar nova" : "Editar"} categoria`}
+        title={`${modal === "create" ? "Adicionar nova" : "Editar"} tags`}
         isCreateSuccess={create.isSuccess}
         isEditSuccess={edit.isSuccess}
         isError={create.isError || edit.isError}
@@ -174,25 +169,25 @@ const Categorias = () => {
             </FormItem>
           )}
         />
-      </DefaultModal>
-      {categorias.isLoading && <div>Carregando...</div>}
-      {categorias.isError && (
+      </DefaultModal>{" "}
+      {tags.isLoading && <div>Carregando...</div>}
+      {tags.isError && (
         <div>
-          Ocorreu um erro ao carregar <strong>categorias</strong>
+          Ocorreu um erro ao carregar <strong>tags</strong>
         </div>
       )}
-      {categorias.isSuccess && (
+      {tags.isSuccess && (
         <div className="px-4">
-          {categorias.isFetching ? (
+          {tags.isFetching ? (
             <div className="w-full flex mt-6 items-center justify-center overflow-hidden">
               Carregando...
             </div>
           ) : (
-            <DataTableBase<GetCategoriasTYPE>
+            <DataTableBase<GetTagsTYPE>
               subHeader
               title={title}
               columns={columns}
-              data={categorias.data.categorias ?? []}
+              data={tags.data.tags ?? []}
             />
           )}
         </div>
@@ -201,4 +196,4 @@ const Categorias = () => {
   );
 };
 
-export default Categorias;
+export default Tags;

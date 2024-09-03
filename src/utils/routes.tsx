@@ -6,8 +6,8 @@ import AdminLayout from "@/components/layout/adminLayout/adminLayout";
 import AdminHome from "@/pages/adminHome";
 import Treinamentos from "@/pages/treinamentos/treinamentos";
 import Categorias from "@/pages/categorias/categorias";
-import Tags from "@/pages/tags";
 import NovoTreinamento from "@/pages/treinamentos/new";
+import Tags from "@/pages/tags/tags";
 
 export const router = createBrowserRouter([
   {

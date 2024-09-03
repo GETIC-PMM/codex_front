@@ -11,7 +11,7 @@ import {
 import { ModalActions } from "@/utils/types";
 import { AxiosError } from "axios";
 import { useEffect } from "react";
-import { toast as t, toast } from "sonner";
+import { toast } from "sonner";
 
 type DeleteModalProps = {
   open: ModalActions;
@@ -20,7 +20,6 @@ type DeleteModalProps = {
   isSuccess?: boolean;
   isError?: boolean;
   isLoading?: boolean;
-  toast?: typeof t;
   error?: AxiosError<any> | null;
 };
 
