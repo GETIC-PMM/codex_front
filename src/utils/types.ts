@@ -24,9 +24,17 @@ export type GetTagsTYPE = {
   titulo: string;
 };
 
+export type Meta = {
+  perPage: number;
+  page: number;
+  search: string;
+  searchBy: string;
+};
+
 export const customStyles: TableStyles = {
   headCells: {
     style: {
+      fontWeight: "bold",
       paddingLeft: "8px",
       paddingRight: "8px",
       backgroundColor: "#023E84",

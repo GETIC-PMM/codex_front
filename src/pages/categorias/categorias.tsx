@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import DeleteModal from "@/components/partials/deleteModal";
-import { toast } from "sonner";
+import { useDebounce } from "use-debounce";
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -31,17 +31,28 @@ const formSchema = z.object({
 
 const Categorias = () => {
   const [modal, setModal] = useState<ModalActions>("");
-  const categorias = useGetCategorias();
+  const [perPage, setPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [searchBy, setSearchBy] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
+
+  const categorias = useGetCategorias({
+    perPage,
+    page,
+    search: debouncedSearch,
+    searchBy,
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  // console.log({ erros: form.formState.errors });
-  // console.log({ values: form.getValues() });
+  console.log(categorias.data);
 
   const columns = [
     {
-      name: <b>Titulo</b>,
+      name: <>Titulo</>,
       selector: (row: GetCategoriasTYPE) => row.titulo ?? "-",
       sortable: true,
     },
@@ -175,28 +186,28 @@ const Categorias = () => {
           )}
         />
       </DefaultModal>
-      {categorias.isLoading && <div>Carregando...</div>}
       {categorias.isError && (
         <div>
           Ocorreu um erro ao carregar <strong>categorias</strong>
         </div>
       )}
-      {categorias.isSuccess && (
-        <div className="px-4">
-          {categorias.isFetching ? (
-            <div className="w-full flex mt-6 items-center justify-center overflow-hidden">
-              Carregando...
-            </div>
-          ) : (
-            <DataTableBase<GetCategoriasTYPE>
-              subHeader
-              title={title}
-              columns={columns}
-              data={categorias.data.categorias ?? []}
-            />
-          )}
-        </div>
-      )}
+      <div className="px-4">
+        <DataTableBase<GetCategoriasTYPE>
+          subHeader
+          title={title}
+          columns={columns}
+          data={categorias.isSuccess ? categorias.data.categorias : []}
+          meta={categorias.isSuccess ? categorias.data.meta : null}
+          setPerPage={setPerPage}
+          setPage={setPage}
+          page={page}
+          progressPending={categorias.isFetching}
+          setSearch={setSearch}
+          search={search}
+          searchBy={searchBy}
+          setSearchBy={setSearchBy}
+        />
+      </div>
     </div>
   );
 };

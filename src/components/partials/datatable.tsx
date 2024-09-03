@@ -1,5 +1,5 @@
 import { customStyles } from "@/utils/types";
-import React from "react";
+import React, { useEffect } from "react";
 import DataTable, { Alignment, TableProps } from "react-data-table-component";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import {
@@ -51,27 +51,40 @@ const LoaderComponent = () => {
   );
 };
 
-function DataTableBase<T extends object>(props: TableProps<T>) {
-  const [filterData, setFilterData] = React.useState<T[]>([]);
-  const [filterText, setFilterText] = React.useState("");
-  const [searchBy, setSearchBy] = React.useState("");
-
-  console.log({ searchBy });
-  console.log(
-    props.columns[1].selector?.toString().substring(13).split(" ")[0]
-  );
-
-  React.useEffect(() => {
-    setFilterData(props.data);
-  }, [props.data]);
-
-  console.log(props.columns[0]);
+function DataTableBase<T extends object>({
+  meta,
+  ...props
+}: TableProps<T> & {
+  meta: {
+    pagination: {
+      per_page: number;
+      total_pages: number;
+      total_objects: number;
+      links: { first: string; last: string; next: string; prev: string };
+    };
+  };
+  setPerPage: (p: number) => void;
+  setPage: (p: number) => void;
+  page: number;
+  hideButtonsOnBottom?: boolean;
+  setSearch: (s: string) => void;
+  search: string;
+  setSearchBy: (s: string) => void;
+  searchBy: string;
+}) {
+  useEffect(() => {
+    props.setSearchBy(
+      props.columns[0].selector
+        ?.toString()
+        .substring(13)
+        .split(" ")[0] as string
+    );
+  }, []);
 
   return (
     <div className="rounded bg-white overflow-hidden shadow-lg p-4 px-8">
       <DataTable
         className="rounded-md shadow-md bg-zinc-200/70"
-        progressPending={props.progressPending}
         progressComponent={<LoaderComponent />}
         title={props.title}
         //translate the the pagination text
@@ -97,6 +110,7 @@ function DataTableBase<T extends object>(props: TableProps<T>) {
         highlightOnHover
         responsive
         pagination
+        paginationServer
         selectableRowsComponentProps={selectProps}
         sortIcon={sortIcon}
         dense
@@ -106,9 +120,9 @@ function DataTableBase<T extends object>(props: TableProps<T>) {
             <div className="flex gap-2">
               <Select
                 onValueChange={(e) => {
-                  setSearchBy(e);
+                  props.setSearchBy(e);
                 }}
-                value={searchBy}
+                value={props.searchBy}
               >
                 <SelectTrigger className="flex-[1]">
                   <SelectValue placeholder="Selecione um parametro de busca" />
@@ -128,7 +142,7 @@ function DataTableBase<T extends object>(props: TableProps<T>) {
                                 .split(" ")[0] as string
                             }
                           >
-                            {column.name?.props.children}
+                            {column.name}
                           </SelectItem>
                         );
                     })}
@@ -140,32 +154,8 @@ function DataTableBase<T extends object>(props: TableProps<T>) {
                 className="flex-[3]"
                 type="text"
                 placeholder="Digite para pesquisar..."
-                value={filterText}
-                onChange={(e) => {
-                  const filteredData = props.data.filter((item) => {
-                    return Object.keys(item).some((key) => {
-                      if (searchBy.includes(".")) {
-                        const key = searchBy.split(".")[0] as keyof typeof item;
-
-                        return String(
-                          item[key][
-                            searchBy.split(
-                              "."
-                            )[1] as keyof (typeof item)[typeof key]
-                          ]
-                        )
-                          .toLowerCase()
-                          .includes(e.target.value.toLowerCase());
-                      } else {
-                        return String(item[searchBy as keyof typeof item])
-                          .toLowerCase()
-                          .includes(e.target.value.toLowerCase());
-                      }
-                    });
-                  });
-                  setFilterData(filteredData);
-                  setFilterText(e.target.value);
-                }}
+                value={props.search}
+                onChange={(e) => props.setSearch(e.target.value)}
               />
             </div>
 
@@ -212,14 +202,17 @@ function DataTableBase<T extends object>(props: TableProps<T>) {
         }
         subHeaderAlign={Alignment.LEFT}
         {...props}
-        data={filterData}
         customStyles={customStyles}
+        paginationTotalRows={meta && meta.pagination.total_objects}
+        paginationPerPage={meta ? meta.pagination.per_page : 10}
+        paginationRowsPerPageOptions={[10, 25, 50, 100]}
+        onChangeRowsPerPage={(p) => props.setPerPage(p)}
+        onChangePage={(p) => props.setPage(p)}
+        paginationDefaultPage={props.page}
       />
 
       {/* BUTTONS */}
-      {props.hideButtonsOnBottom ? (
-        <></>
-      ) : (
+      {!props.hideButtonsOnBottom && (
         <div className="flex gap-2 mt-4">
           <Button className="min-w-[150px] font-bold flex gap-2 active:bg-green-600">
             Imprimir <Printer size={14} />
