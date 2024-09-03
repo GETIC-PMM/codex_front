@@ -1,5 +1,4 @@
 import { AiOutlineMenu } from "react-icons/ai";
-import LogoMossoroDigitalDark from "@/assets/LogoMossoroDigitalDark.jpeg";
 import UserPicIcon from "@/assets/UserPicIcon.jpeg";
 import { Button } from "@/components/ui/button";
 import { BsGrid3X3GapFill } from "react-icons/bs";
@@ -11,6 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import LogoMossoroDigital from "@/assets/logo-mossoro-digital-2.png";
 import DiretiLogo from "@/assets/diretiLogo.svg";
+import { useContext } from "react";
+import { KeycloakContext } from "@/services/useAuth";
 
 const Header = ({
   setIsNavbarExpanded,
@@ -45,6 +46,8 @@ const Header = ({
   //     // navigate('/')
   // }
 
+  const { keycloak } = useContext(KeycloakContext);
+
   return (
     <div className="fixed w-full h-16 top-0 z-40 shadow-md">
       <div className="bg-white flex h-full justify-between px-4 items-center text-black">
@@ -69,7 +72,7 @@ const Header = ({
               <BsGrid3X3GapFill />
             </DialogTrigger>
             <DialogContent className="flex p-0 overflow-hidden border-none h-[60%] w-[80%]">
-              <DialogHeader className="bg-pmm-blue text-white p-10 flex-[1]">
+              <DialogHeader className="bg-pmmBlue text-white p-10 flex-[1]">
                 <h1 className="text-2xl font-bold">Alterar sistema</h1>
                 <span className="text-sm">
                   Escolha um dos sistemas listados ao lado para aceessar suas
@@ -77,14 +80,14 @@ const Header = ({
                 </span>
               </DialogHeader>
               <div className="p-10 flex-[2] flex flex-col items-start gap-3 relative">
-                <h1 className="text-pmm-blue text-xl">Prefeitura de Mossoró</h1>
+                <h1 className="text-pmmBlue text-xl">Prefeitura de Mossoró</h1>
                 <Button className="p-0 text-start" variant={"link"}>
-                  <a href="" className="text-pmm-blue/60">
+                  <a href="" className="text-pmmBlue/60">
                     Sistema de RH
                   </a>
                 </Button>
                 <Button className="p-0" variant={"link"}>
-                  <a href="" className="text-pmm-blue/60">
+                  <a href="" className="text-pmmBlue/60">
                     Sistema de ponto eletrônico
                   </a>
                 </Button>
@@ -107,7 +110,12 @@ const Header = ({
               height={40}
             />
           </div>
-          <Button className="ml-2" onClick={() => {}}>
+          <Button
+            className="ml-2"
+            onClick={() => {
+              keycloak.logout();
+            }}
+          >
             Logout
           </Button>
         </div>

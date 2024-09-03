@@ -1,6 +1,9 @@
 import React from "react";
 import { AiFillHome } from "react-icons/ai";
+import { SiGoogleclassroom } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
+import { BiCategory } from "react-icons/bi";
+import { FaHashtag } from "react-icons/fa";
 
 const Navbar = ({
   setIsNavbarExpanded,
@@ -24,7 +27,7 @@ const Navbar = ({
       <div className="w-full h-[2px]">
         <button
           onClick={() => {
-            navigate("/admin/dashboard");
+            navigate("/painel");
           }}
           className={`flex items-center py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
         >
@@ -36,6 +39,54 @@ const Navbar = ({
             <AiFillHome className="fill-white w-4 h-4" />
           </div>
           {isNavbarExpanded && <div>Home</div>}
+        </button>
+
+        <button
+          onClick={() => {
+            navigate("/painel/treinamentos");
+          }}
+          className={`flex items-center py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
+        >
+          <div
+            className={`p-4 items-center  ${
+              isNavbarExpanded ? "md:flex" : "md:flex hidden"
+            }`}
+          >
+            <SiGoogleclassroom className="fill-white w-4 h-4" />
+          </div>
+          {isNavbarExpanded && <div>Treinamentos</div>}
+        </button>
+
+        <button
+          onClick={() => {
+            navigate("/painel/categorias");
+          }}
+          className={`flex items-center py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
+        >
+          <div
+            className={`p-4 items-center  ${
+              isNavbarExpanded ? "md:flex" : "md:flex hidden"
+            }`}
+          >
+            <BiCategory className="fill-white w-4 h-4" />
+          </div>
+          {isNavbarExpanded && <div>Categoria</div>}
+        </button>
+
+        <button
+          onClick={() => {
+            navigate("/painel/tags");
+          }}
+          className={`flex items-center py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
+        >
+          <div
+            className={`p-4 items-center  ${
+              isNavbarExpanded ? "md:flex" : "md:flex hidden"
+            }`}
+          >
+            <FaHashtag className="fill-white w-4 h-4" />
+          </div>
+          {isNavbarExpanded && <div>Tags</div>}
         </button>
       </div>
       <div className="h-14"></div>
