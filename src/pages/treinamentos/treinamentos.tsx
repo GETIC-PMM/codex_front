@@ -5,11 +5,24 @@ import DataTableBase from "@/components/partials/datatable";
 import { Button } from "@/components/ui/button";
 import { useGetTreinamentos } from "@/utils/queries";
 import { GetTreinamentosTYPE } from "@/utils/types";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 
 const Treinamentos = () => {
-  const treinamentos = useGetTreinamentos();
   const navigate = useNavigate();
+  const [perPage, setPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [searchBy, setSearchBy] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
+
+  const treinamentos = useGetTreinamentos({
+    perPage,
+    page,
+    search: debouncedSearch,
+    searchBy,
+  });
 
   const columns = [
     // {
@@ -83,7 +96,18 @@ const Treinamentos = () => {
                 subHeader
                 title={titleValorAuxiliar}
                 columns={columns}
-                data={treinamentos.data.treinamentos ?? []}
+                data={
+                  treinamentos.isSuccess ? treinamentos.data.treinamentos : []
+                }
+                meta={treinamentos.isSuccess ? treinamentos.data.meta : null}
+                setPerPage={setPerPage}
+                setPage={setPage}
+                page={page}
+                progressPending={treinamentos.isFetching}
+                setSearch={setSearch}
+                search={search}
+                searchBy={searchBy}
+                setSearchBy={setSearchBy}
               />
             )}
           </div>

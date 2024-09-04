@@ -36,6 +36,7 @@ const Categorias = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
+  const token = localStorage.getItem("token");
 
   const categorias = useGetCategorias({
     perPage,
@@ -47,8 +48,6 @@ const Categorias = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-
-  console.log(categorias.data);
 
   const columns = [
     {
@@ -107,7 +106,11 @@ const Categorias = () => {
 
   const create = useMutation(
     async (data: Omit<GetCategoriasTYPE, "id">) => {
-      await axios.post(`${API_URL_ADMIN}/categorias`, data, {});
+      await axios.post(`${API_URL_ADMIN}/categorias`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     },
     {
       onSuccess: () => {
@@ -119,7 +122,11 @@ const Categorias = () => {
 
   const edit = useMutation(
     async (data: GetCategoriasTYPE) => {
-      await axios.put(`${API_URL_ADMIN}/categorias/${data.id}`, data, {});
+      await axios.put(`${API_URL_ADMIN}/categorias/${data.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     },
     {
       onSuccess: () => {
@@ -131,10 +138,11 @@ const Categorias = () => {
 
   const deleteData = useMutation(
     async (id: string) => {
-      const { data } = await axios.delete(
-        `${API_URL_ADMIN}/categorias/${id}`,
-        {}
-      );
+      const { data } = await axios.delete(`${API_URL_ADMIN}/categorias/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     },
     {

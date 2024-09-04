@@ -36,6 +36,7 @@ const Tags = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
+  const token = localStorage.getItem("token");
 
   const tags = useGetTags({
     perPage,
@@ -105,7 +106,11 @@ const Tags = () => {
 
   const create = useMutation(
     async (data: Omit<GetTagsTYPE, "id">) => {
-      await axios.post(`${API_URL_ADMIN}/tags`, data, {});
+      await axios.post(`${API_URL_ADMIN}/tags`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     },
     {
       onSuccess: () => {
@@ -117,7 +122,11 @@ const Tags = () => {
 
   const edit = useMutation(
     async (data: GetTagsTYPE) => {
-      await axios.put(`${API_URL_ADMIN}/tags/${data.id}`, data, {});
+      await axios.put(`${API_URL_ADMIN}/tags/${data.id}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     },
     {
       onSuccess: () => {
@@ -129,7 +138,11 @@ const Tags = () => {
 
   const deleteData = useMutation(
     async (id: string) => {
-      const { data } = await axios.delete(`${API_URL_ADMIN}/tags/${id}`, {});
+      const { data } = await axios.delete(`${API_URL_ADMIN}/tags/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     },
     {

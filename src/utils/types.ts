@@ -24,12 +24,14 @@ export type GetTagsTYPE = {
   titulo: string;
 };
 
-export type Meta = {
-  perPage: number;
-  page: number;
-  search: string;
-  searchBy: string;
-};
+export type Meta =
+  | {
+      perPage: number;
+      page: number;
+      search: string;
+      searchBy: string;
+    }
+  | { perPage: "all" };
 
 export const customStyles: TableStyles = {
   headCells: {

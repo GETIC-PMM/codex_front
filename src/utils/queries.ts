@@ -3,11 +3,13 @@ import { API_URL } from "./consts";
 import axios from "axios";
 import { Meta } from "./types";
 
-export const useGetTreinamentos = () =>
+export const useGetTreinamentos = ({ perPage, page, search, searchBy }: Meta) =>
   useQuery({
     queryKey: ["treinamentos"],
     queryFn: async () => {
-      const { data } = await axios.get(API_URL + "/treinamentos");
+      const { data } = await axios.get(API_URL + "/treinamentos", {
+        params: { perPage, page, search, searchBy },
+      });
       return data;
     },
     refetchOnWindowFocus: false,
