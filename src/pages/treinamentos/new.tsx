@@ -43,10 +43,10 @@ const formSchema = z.object({
 
 const NovoTreinamento = () => {
   const categorias = useGetCategorias({
-    perPage: "all",
+    per_page: "all",
   });
   const tags = useGetTags({
-    perPage: "all",
+    per_page: "all",
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

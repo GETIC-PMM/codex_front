@@ -39,7 +39,7 @@ const Tags = () => {
   const token = localStorage.getItem("token");
 
   const tags = useGetTags({
-    perPage,
+    per_page: perPage,
     page,
     search: debouncedSearch,
     searchBy,

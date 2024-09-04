@@ -39,7 +39,7 @@ const Categorias = () => {
   const token = localStorage.getItem("token");
 
   const categorias = useGetCategorias({
-    perPage,
+    per_page: perPage,
     page,
     search: debouncedSearch,
     searchBy,

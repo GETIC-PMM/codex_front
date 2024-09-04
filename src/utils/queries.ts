@@ -3,39 +3,38 @@ import { API_URL } from "./consts";
 import axios from "axios";
 import { Meta } from "./types";
 
-export const useGetTreinamentos = ({ perPage, page, search, searchBy }: Meta) =>
+export const useGetTreinamentos = (props: Meta) =>
   useQuery({
     queryKey: ["treinamentos"],
     queryFn: async () => {
       const { data } = await axios.get(API_URL + "/treinamentos", {
-        params: { perPage, page, search, searchBy },
+        params: props,
       });
       return data;
     },
     refetchOnWindowFocus: false,
   });
 
-export const useGetCategorias = ({ perPage, page, search, searchBy }: Meta) =>
+export const useGetCategorias = (props: Meta) =>
   useQuery({
-    queryKey: ["categorias", perPage, page, search, searchBy],
+    queryKey: ["categorias", props],
     queryFn: async () => {
       const { data } = await axios.get(API_URL + `/categorias`, {
-        params: { perPage, page, search, searchBy },
+        params: props,
       });
       return data;
     },
     refetchOnWindowFocus: false,
   });
 
-export const useGetTags = ({ perPage, page, search, searchBy }: Meta) =>
+export const useGetTags = (props: Meta) =>
   useQuery({
-    queryKey: ["tags", perPage, page, search],
+    queryKey: ["tags", props],
     queryFn: async () => {
       const { data } = await axios.get(API_URL + "/tags", {
-        params: { perPage, page, search, searchBy },
+        params: props,
       });
       return data;
     },
     refetchOnWindowFocus: false,
   });
-  

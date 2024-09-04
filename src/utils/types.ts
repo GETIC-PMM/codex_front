@@ -19,7 +19,6 @@ export type GetCategoriasTYPE = {
   titulo: string;
 };
 
-
 export type GetTagsTYPE = {
   id: string;
   titulo: string;
@@ -27,12 +26,13 @@ export type GetTagsTYPE = {
 
 export type Meta =
   | {
-      perPage: number;
+      per_page: number;
       page: number;
       search: string;
       searchBy: string;
     }
-  | { perPage: "all" };
+  | { per_page: "all" }
+  | { search: string; searchBy: "all" };
 
 export const customStyles: TableStyles = {
   headCells: {

@@ -18,7 +18,7 @@ const Treinamentos = () => {
   const [debouncedSearch] = useDebounce(search, 500);
 
   const treinamentos = useGetTreinamentos({
-    perPage,
+    per_page: perPage,
     page,
     search: debouncedSearch,
     searchBy,
