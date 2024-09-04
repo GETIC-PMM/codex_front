@@ -1,7 +1,7 @@
 import Ruby from "@/assets/ruby.svg";
 import Header from "../layout/siteLayout/partials/header";
 
-const aula = () => {
+const treinamento = () => {
   return (
     
   <div className="grid grid-rows-2 grid-flow-col gap-4">
@@ -60,4 +60,4 @@ const aula = () => {
  
   );
 }
-export default aula;
+export default treinamento;

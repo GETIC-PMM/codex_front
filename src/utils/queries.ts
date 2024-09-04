@@ -38,3 +38,4 @@ export const useGetTags = ({ perPage, page, search, searchBy }: Meta) =>
     },
     refetchOnWindowFocus: false,
   });
+  
