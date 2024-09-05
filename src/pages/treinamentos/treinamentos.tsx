@@ -3,19 +3,15 @@ import FourRectanglesIcon from "@/components/icons/FourRectanglesIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
 import DataTableBase from "@/components/partials/datatable";
 import { Button } from "@/components/ui/button";
+import { useMeta } from "@/services/useMeta";
 import { useGetTreinamentos } from "@/utils/queries";
 import { GetTreinamentosTYPE } from "@/utils/types";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDebounce } from "use-debounce";
 
 const Treinamentos = () => {
   const navigate = useNavigate();
-  const [perPage, setPerPage] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("");
-  const [debouncedSearch] = useDebounce(search, 500);
+
+  const { perPage, page, searchBy, debouncedSearch } = useMeta();
 
   const treinamentos = useGetTreinamentos({
     per_page: perPage,
@@ -79,39 +75,21 @@ const Treinamentos = () => {
   return (
     <div>
       <div>
-        {treinamentos.isLoading && <div>Carregando...</div>}
         {treinamentos.isError && (
           <div>
             Ocorreu um erro ao carregar <strong>treinamentos</strong>
           </div>
         )}
-        {treinamentos.isSuccess && (
-          <div className="px-4">
-            {treinamentos.isFetching ? (
-              <div className="w-full flex mt-6 items-center justify-center overflow-hidden">
-                Carregando...
-              </div>
-            ) : (
-              <DataTableBase<GetTreinamentosTYPE>
-                subHeader
-                title={titleValorAuxiliar}
-                columns={columns}
-                data={
-                  treinamentos.isSuccess ? treinamentos.data.treinamentos : []
-                }
-                meta={treinamentos.isSuccess ? treinamentos.data.meta : null}
-                setPerPage={setPerPage}
-                setPage={setPage}
-                page={page}
-                progressPending={treinamentos.isFetching}
-                setSearch={setSearch}
-                search={search}
-                searchBy={searchBy}
-                setSearchBy={setSearchBy}
-              />
-            )}
-          </div>
-        )}
+        <div className="px-4">
+          <DataTableBase<GetTreinamentosTYPE>
+            subHeader
+            title={titleValorAuxiliar}
+            columns={columns}
+            data={treinamentos.isSuccess ? treinamentos.data.treinamentos : []}
+            meta={treinamentos.isSuccess ? treinamentos.data.meta : null}
+            progressPending={treinamentos.isLoading}
+          />
+        </div>
       </div>
     </div>
   );

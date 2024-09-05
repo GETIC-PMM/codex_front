@@ -1,6 +1,5 @@
 import { useGetTreinamento } from "@/utils/queries";
 import MDEditor from "@uiw/react-md-editor";
-import React from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 
