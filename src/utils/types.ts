@@ -14,6 +14,20 @@ export type GetTreinamentosTYPE = {
   corpo: string;
 };
 
+export type TreinamentosType = {
+  id: string;
+  titulo: string;
+  resumo: string;
+  tags: GetTagsTYPE[];
+  caregorias: GetCategoriasTYPE[];
+  autor: string;
+  data_publicacao: string;
+  capa: {
+    url: string;
+  };
+  corpo: string;
+};
+
 export type GetCategoriasTYPE = {
   id: string;
   titulo: string;

@@ -25,6 +25,16 @@ export const useGetTreinamentosDestaque = () =>
     refetchOnWindowFocus: false,
   });
 
+export const useGetTreinamentosAcessoRapido = () =>
+  useQuery({
+    queryKey: ["treinamentos_acesso_rapido"],
+    queryFn: async () => {
+      const { data } = await axios.get(API_URL + `/categorias/destaque_home`);
+      return data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
 export const useGetTreinamento = (id: string | undefined) =>
   useQuery({
     queryKey: ["treinamentos"],

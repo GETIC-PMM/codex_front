@@ -9,7 +9,7 @@ const CarouselHighlight = ({
   link,
   capa,
 }: {
-  tags: string[];
+  tags: GetTagsTYPE[];
   title: string;
   description: string;
   link: string;
@@ -20,7 +20,7 @@ const CarouselHighlight = ({
       <img
         src={`${BASE_URL}${capa}`}
         alt="Hero"
-        className="w-full aspect-video object-cover object-center"
+        className="w-full aspect-video object-cover object-center rounded-md"
       />
       <div className="absolute right-10 bottom-10 text-white flex flex-col items-end gap-4 max-w-[400px]">
         <div className="flex gap-2 text-black text-xs">
