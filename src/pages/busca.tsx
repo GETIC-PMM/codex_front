@@ -1,43 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Aula from "../components/partials/treinamento";
-import { Link } from "react-router-dom";
-import { Button } from "../components/ui/button";
-import {useGetTreinamentos, useGetCategorias, useGetTags } from "../utils/queries";
-import {
-     Select,
-    SelectGroup,
-    SelectValue,
-    SelectTrigger,
-    SelectContent,
-    SelectLabel,
-    SelectItem,
-    SelectSeparator,
-    SelectScrollUpButton,
-    SelectScrollDownButton,
-} from "../components/ui/select";
-
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { API_URL } from "@/utils/consts";
-import { GetTagsTYPE, GetTreinamentosTYPE, GetCategoriasTYPE } from '../utils/types';
+import { GetTagsTYPE, GetTreinamentosTYPE, GetCategoriasTYPE, TreinamentosType } from '../utils/types';
 import Treinamento from "../components/partials/treinamento";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select";
 
 
 
-
-const items = [
-  
-  { id: 1, title: 'Back End Developer'},
-  { id: 2, title: 'Front End Developer' },
-  { id: 3, title: 'User Interface Designer'},
-]
 const Busca = () => {
-  
-  const tags = useGetTags({ Headers })
-  const treinamentos = useGetTreinamentos({ Headers });
-  const categorias = useGetCategorias({ Headers });
+  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedCategoria, setSelectedCategoria] = useState('');
 
-
+  const [search, setSearch] = useSearchParams()
+  console.log({search: search.get('search')})
+  const busca= search.get('search')
 
   const getData = useQuery({
       queryKey: ['treinamentos, tags, categorias'],
@@ -48,28 +28,57 @@ const Busca = () => {
                   headers: {
                       Authorization: `Bearer ${localStorage.getItem('token')}`,
                   },
+                  params:{
+                      search: search.get('search'),
+                      searchBy: 'all'
+                  }
               }
           )
           return data
       },
   })
+
+  useEffect(() => {
+      getData.refetch()
+  }, [search.get('search')])
  
   return (
     <div>
-      <div className="mt-4">
-        <div className="w-8 h-1 bg-green-600 rounded-full"></div>
-
-     
-
+      <div className="mt-4 mb-8">
+        <div className="w-8 h-1 bg-green-600 rounded-full" mb-8></div>  
         <span className="uppercase text-pmmBlue font-bold text-xs ">TREINAMENTO</span>
         <div className="flex flex-2 justify-between  gap-2">
-          <h1 className="text-pmmBlue text-4xl font-bold">Resultados para {}</h1>
+          <h1 className="text-pmmBlue text-4xl font-bold">Resultados para "{busca}"</h1>
           <div className="flex w-41 justify-between gap-2">
+            <form>
+              <select className="border border-gray-300 rounded-md shadow-sm focus:ring-pmmBlue focus:border-pmmBlue sm:text-sm">
+                
+                
+
+
+
+                <option>Recentes</option>
+                <option>Antigos</option>
+              </select>
+
+            </form>
 
           </div>
         </div>
       </div>
-          <Treinamento />
+      <div className="flex flex-col gap-10 ms-8">
+        {getData.data?.treinamentos.map((treinamento: TreinamentosType) => (
+          <Treinamento
+            key={treinamento.id}
+            tags={treinamento.tags}
+            capa={treinamento.capa}
+            titulo={treinamento.titulo}
+            nome_do_autor={treinamento.nome_do_autor}
+            data_publicacao={treinamento.data_publicacao}
+            resumo={treinamento.resumo}
+            id={treinamento.id}
+          />
+        ))}
       <div className="relative mt-11"></div>
       
 
@@ -154,6 +163,7 @@ const Busca = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -63,7 +63,7 @@ const Homepage = () => {
               <CarouselAcessoRapido
                 key={treinamento.id}
                 capa={treinamento.capa.url}
-                autor={treinamento.autor}
+                autor={treinamento.nome_do_autor}
                 data={treinamento.data_publicacao}
                 titulo={treinamento.titulo}
                 resumo={treinamento.resumo}
@@ -94,7 +94,7 @@ const Homepage = () => {
                   <CarouselAcessoRapido
                     key={treinamento.id}
                     capa={treinamento.capa.url}
-                    autor={treinamento.autor}
+                    autor={treinamento.nome_do_autor}
                     data={treinamento.data_publicacao}
                     titulo={treinamento.titulo}
                     resumo={treinamento.resumo}
