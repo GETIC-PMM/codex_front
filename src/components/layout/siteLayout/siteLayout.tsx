@@ -4,8 +4,8 @@ import { Outlet } from "react-router-dom";
 
 const SiteLayout = () => {
   return (
-    <div className="flex items-center flex-col">
-      <div className={`w-full max-w-[1200px]`}>
+    <div className="flex items-center flex-col h-full">
+      <div className={`w-full max-w-[1200px] flex flex-col`}>
         <Header />
         <div className="w-full">
           <Outlet />

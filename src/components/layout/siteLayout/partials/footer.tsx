@@ -8,7 +8,7 @@ import { PiPhoneCallLight } from "react-icons/pi";
 const Footer = () => {
   // always on bottom
   return (
-    <footer className="w-full bg-pmmBlue text-white pt-24 pb-8 mt-10">
+    <footer className="w-full bg-pmmBlue text-white pt-16 pb-8 mt-10">
       <div
         className={`w-full max-w-[1200px] mx-auto flex items-center justify-between  gap-36 text-sm`}
       >

@@ -1,4 +1,5 @@
-import { Button } from "../../../ui/button";
+import { cn } from "@/lib/utils";
+import { Button, buttonVariants } from "../../../ui/button";
 import DiretiLogo from "@/assets/diretiLogo.svg";
 
 const Header = () => {
@@ -17,9 +18,12 @@ const Header = () => {
       <div className="flex gap-16 items-center text-pmmGray">
         <a href="/login">Sobre a DIRETI</a>
         <a href="/register">Treinamentos</a>
-        <Button className="bg-pmmBlue font-semibold text-sm">
+        <a
+          href="/painel"
+          className={buttonVariants() + "bg-pmmBlue font-semibold text-sm"}
+        >
           Criar treinamento
-        </Button>
+        </a>
       </div>
     </div>
   );

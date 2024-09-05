@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Navbar from "./partials/navbar";
 import { Outlet } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import Header from "./partials/header";
-import AuthProviderKC from "@/services/useAuth";
+import AuthProviderKC, { KeycloakContext } from "@/services/useAuth";
 
 const AdminLayout = () => {
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);

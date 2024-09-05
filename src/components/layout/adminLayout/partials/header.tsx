@@ -66,7 +66,11 @@ const Header = ({
             width={200}
           />
         </div>
-        <div className="flex gap-3">
+
+        <a href="/" className="hover:underline">
+          Voltar para treinamentos
+        </a>
+        <div className="flex gap-3 items-center">
           <Dialog>
             <DialogTrigger>
               <BsGrid3X3GapFill />
@@ -116,7 +120,7 @@ const Header = ({
               keycloak.logout();
             }}
           >
-            Logout
+            Sair
           </Button>
         </div>
       </div>

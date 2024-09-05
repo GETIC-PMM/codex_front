@@ -8,6 +8,7 @@ import Treinamentos from "@/pages/treinamentos/treinamentos";
 import Categorias from "@/pages/categorias/categorias";
 import NovoTreinamento from "@/pages/treinamentos/new";
 import Tags from "@/pages/tags/tags";
+import ShowTreinamento from "@/pages/treinamentos/showTreinamento";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "/busca",
         element: <Busca />,
+      },
+      {
+        path: "/treinamento/:id",
+        element: <ShowTreinamento />,
       },
     ],
   },

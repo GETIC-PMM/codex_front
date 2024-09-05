@@ -31,7 +31,7 @@ const Treinamentos = () => {
     //     sortable: true,
     // },
     {
-      name: <b>AAAA</b>,
+      name: <>Titulo</>,
       selector: (row: GetTreinamentosTYPE) => row.titulo ?? "-",
       sortable: true,
     },
