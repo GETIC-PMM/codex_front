@@ -1,26 +1,32 @@
+import { BASE_URL } from "@/utils/consts";
 import { CarouselItem } from "../ui/carousel";
+import { GetTagsTYPE } from "@/utils/types";
 
 const CarouselHighlight = ({
   tags,
   title,
   description,
   link,
-  image,
+  capa,
 }: {
   tags: string[];
   title: string;
   description: string;
   link: string;
-  image: string;
+  capa: string;
 }) => {
   return (
     <CarouselItem className="relative">
-      <img src={image} alt="Hero" className="w-full" />
+      <img
+        src={`${BASE_URL}${capa}`}
+        alt="Hero"
+        className="w-full aspect-video object-cover object-center"
+      />
       <div className="absolute right-10 bottom-10 text-white flex flex-col items-end gap-4 max-w-[400px]">
         <div className="flex gap-2 text-black text-xs">
           {tags.map((tag) => (
             <div className="rounded-full py-1 px-8 bg-white hover:bg-zinc-300 cursor-pointer">
-              {tag}
+              {tag.titulo}
             </div>
           ))}
         </div>

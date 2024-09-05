@@ -72,7 +72,7 @@ const NovoTreinamento = () => {
     resolver: zodResolver(formSchemaIdTitulo),
   });
   const formTag = useForm<z.infer<typeof formSchemaIdTitulo>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchemaIdTitulo),
   });
   const [optionsTags, setOptionsTags] = useState<LabelValue[]>([]);
   const [selectedTags, setSelectedTags] = useState<LabelValue[]>([]);
@@ -131,6 +131,8 @@ const NovoTreinamento = () => {
     {
       onSuccess: () => {
         toast.success("Tag criada com sucesso");
+        setModalTag("");
+        tags.refetch();
       },
       onError: () => {
         toast.error("Erro ao criar tag");
@@ -165,18 +167,19 @@ const NovoTreinamento = () => {
         }))
       );
     }
-  }, [categorias.data?.categorias]);
+  }, [tags.data?.tags]);
 
   console.log({ erros: form.formState.errors });
 
   return (
     <div>
+      {/* MODAL NOVA CATEGORIA */}
       <DefaultModal
         form={formCategoria}
         onSubmit={() => createCategoria.mutate(formCategoria.getValues())}
         open={modalCategoria}
         setOpen={setModalCategoria}
-        title="Nova Categoria"
+        title="Nova categoria"
       >
         <FormField
           control={formCategoria.control}
@@ -192,6 +195,30 @@ const NovoTreinamento = () => {
           )}
         />
       </DefaultModal>
+
+      {/* MODAL NOVA TAG */}
+      <DefaultModal
+        form={formTag}
+        onSubmit={() => createTag.mutate(formTag.getValues())}
+        open={modalTag}
+        setOpen={setModalTag}
+        title="Nova tag"
+      >
+        <FormField
+          control={formTag.control}
+          name="titulo"
+          render={({ field }) => (
+            <FormItem className="flex flex-col justify-between rounded-lg border p-4 mt-6">
+              <FormLabel>Título</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </DefaultModal>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -285,7 +312,9 @@ const NovoTreinamento = () => {
           <div className="flex flex-col justify-between rounded-lg border p-4 w-full gap-4">
             <div className="w-full flex justify-between">
               <FormLabel>Tags</FormLabel>
-              <Button type="button">Criar nova</Button>
+              <Button onClick={() => setModalTag("create")} type="button">
+                Criar nova
+              </Button>
             </div>
             <PickList
               options={optionsTags}

@@ -4,9 +4,11 @@ import DiretiLogo from "@/assets/diretiLogo.svg";
 
 const Header = () => {
   return (
-    <div className="flex justify-between w-full py-5">
+    <div className="flex justify-between w-full py-5 mb-10">
       <div className="flex gap-10">
-        <img src={DiretiLogo} width={250} alt="Direti Logo" />
+        <a href="/">
+          <img src={DiretiLogo} width={250} alt="Direti Logo" />
+        </a>
 
         {/* TODO: Colocar icone na barra de busca */}
         <input
