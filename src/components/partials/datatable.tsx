@@ -1,5 +1,5 @@
 import { customStyles } from "@/utils/types";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import DataTable, { Alignment, TableProps } from "react-data-table-component";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import {
@@ -20,6 +20,7 @@ import {
 import { Button } from "../ui/button";
 import { Printer, Table } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useMeta } from "@/services/useMeta";
 
 const sortIcon = <MdArrowDownward />;
 const selectProps = {
@@ -63,23 +64,26 @@ function DataTableBase<T extends object>({
       links: { first: string; last: string; next: string; prev: string };
     };
   };
-  setPerPage: (p: number) => void;
-  setPage: (p: number) => void;
-  page: number;
   hideButtonsOnBottom?: boolean;
-  setSearch: (s: string) => void;
-  search: string;
-  setSearchBy: (s: string) => void;
-  searchBy: string;
 }) {
+  const {
+    setPerPage,
+    setPage,
+    search,
+    setSearch,
+    searchBy,
+    setSearchBy,
+    page,
+  } = useMeta();
+
   useEffect(() => {
-    props.setSearchBy(
+    setSearchBy(
       props.columns[0].selector
         ?.toString()
         .substring(13)
         .split(" ")[0] as string
     );
-  }, []);
+  });
 
   return (
     <div className="rounded bg-white overflow-hidden shadow-lg p-4 px-8">
@@ -120,9 +124,9 @@ function DataTableBase<T extends object>({
             <div className="flex gap-2">
               <Select
                 onValueChange={(e) => {
-                  props.setSearchBy(e);
+                  setSearchBy(e);
                 }}
-                value={props.searchBy}
+                value={searchBy}
               >
                 <SelectTrigger className="flex-[1]">
                   <SelectValue placeholder="Selecione um parametro de busca" />
@@ -154,8 +158,8 @@ function DataTableBase<T extends object>({
                 className="flex-[3]"
                 type="text"
                 placeholder="Digite para pesquisar..."
-                value={props.search}
-                onChange={(e) => props.setSearch(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
@@ -206,9 +210,9 @@ function DataTableBase<T extends object>({
         paginationTotalRows={meta && meta.pagination.total_objects}
         paginationPerPage={meta ? meta.pagination.per_page : 10}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        onChangeRowsPerPage={(p) => props.setPerPage(p)}
-        onChangePage={(p) => props.setPage(p)}
-        paginationDefaultPage={props.page}
+        onChangeRowsPerPage={(p) => setPerPage(p)}
+        onChangePage={(p) => setPage(p)}
+        paginationDefaultPage={page}
       />
 
       {/* BUTTONS */}

@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useMeta } from "@/services/useMeta";
 import { API_URL_ADMIN } from "@/utils/consts";
 import { useGetTags } from "@/utils/queries";
 import { GetTagsTYPE, ModalActions } from "@/utils/types";
@@ -21,7 +22,6 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { useDebounce } from "use-debounce";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -31,12 +31,9 @@ const formSchema = z.object({
 
 const Tags = () => {
   const [modal, setModal] = useState<ModalActions>("");
-  const [perPage, setPerPage] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("");
-  const [debouncedSearch] = useDebounce(search, 500);
   const token = localStorage.getItem("token");
+
+  const { perPage, page, searchBy, debouncedSearch } = useMeta();
 
   const tags = useGetTags({
     per_page: perPage,
@@ -205,14 +202,7 @@ const Tags = () => {
           columns={columns}
           data={tags.isSuccess ? tags.data.tags : []}
           meta={tags.isSuccess ? tags.data.meta : null}
-          setPerPage={setPerPage}
-          setPage={setPage}
-          page={page}
-          progressPending={tags.isFetching}
-          setSearch={setSearch}
-          search={search}
-          searchBy={searchBy}
-          setSearchBy={setSearchBy}
+          progressPending={tags.isLoading}
         />
       </div>
     </div>

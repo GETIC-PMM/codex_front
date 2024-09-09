@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import DeleteModal from "@/components/partials/deleteModal";
-import { useDebounce } from "use-debounce";
+import { useMeta } from "@/services/useMeta";
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -31,12 +31,9 @@ const formSchema = z.object({
 
 const Categorias = () => {
   const [modal, setModal] = useState<ModalActions>("");
-  const [perPage, setPerPage] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("");
-  const [debouncedSearch] = useDebounce(search, 500);
   const token = localStorage.getItem("token");
+
+  const { perPage, page, searchBy, debouncedSearch } = useMeta();
 
   const categorias = useGetCategorias({
     per_page: perPage,
@@ -206,14 +203,7 @@ const Categorias = () => {
           columns={columns}
           data={categorias.isSuccess ? categorias.data.categorias : []}
           meta={categorias.isSuccess ? categorias.data.meta : null}
-          setPerPage={setPerPage}
-          setPage={setPage}
-          page={page}
           progressPending={categorias.isFetching}
-          setSearch={setSearch}
-          search={search}
-          searchBy={searchBy}
-          setSearchBy={setSearchBy}
         />
       </div>
     </div>

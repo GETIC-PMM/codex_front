@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
-import { API_URL, API_URL_ADMIN } from "./consts";
+import { API_URL } from "./consts";
 import axios from "axios";
 import { Meta } from "./types";
 
 export const useGetTreinamentos = (props: Meta) =>
   useQuery({
-    queryKey: ["treinamentos"],
+    queryKey: ["treinamentos", props],
     queryFn: async () => {
       const { data } = await axios.get(API_URL + "/treinamentos", {
         params: props,
