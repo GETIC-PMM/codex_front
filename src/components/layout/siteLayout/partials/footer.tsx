@@ -37,9 +37,15 @@ const Footer = () => {
               desenvolvimento de sistemas, sites e aplicativos, além da
               manutenção de hardware do município.
             </p>
-            <Button className="bg-green-600 w-min px-10 hover:bg-green-500">
+            <a
+              target="_blank"
+              href="https://api.whatsapp.com/send?phone=5584991263533"
+              className={
+                "bg-green-600 w-max py-3 rounded px-10 hover:bg-green-500"
+              }
+            >
               Entrar em contato
-            </Button>
+            </a>
           </div>
           <div className="flex-[1] flex flex-col gap-10">
             <p className="text-lg font-semibold">Onde estamos?</p>
@@ -48,10 +54,14 @@ const Footer = () => {
                 <IoLocationOutline className="text-lg" />
                 Avenida Francisco Dutra, 3100, Dom Jaime Câmara
               </p>
-              <p className="flex gap-3">
+              <a
+                target="_blank"
+                href="https://api.whatsapp.com/send?phone=5584991263533"
+                className="flex gap-3 hover:underline w-max"
+              >
                 <PiPhoneCallLight className="text-lg" />
                 (84) 99126-3533
-              </p>
+              </a>
               <a
                 href="mailto:direti.devs@gmail.com"
                 className="flex gap-3 hover:underline"
