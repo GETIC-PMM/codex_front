@@ -35,7 +35,7 @@ const CarouselHighlight = ({
 
         <div className="text-sm text-end">{description}</div>
 
-        <a href={link} className="text-xs">
+        <a href={link} className="text-xs hover:underline">
           Visualizar artigo &gt;
         </a>
       </div>

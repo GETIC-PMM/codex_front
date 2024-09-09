@@ -1,12 +1,18 @@
-import { useGetTreinamento } from "@/utils/queries";
+import {
+  useGetTreinamento,
+  useGetTreinamentosByCategoria,
+} from "@/utils/queries";
 import MDEditor from "@uiw/react-md-editor";
-import React from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
+import TreinamentoRelacionado from "@/components/partials/treinamentoRelacionado";
 
 const ShowTreinamento = () => {
   const { id } = useParams();
   const { data } = useGetTreinamento(id);
+  const { data: treinamentosRelacionados } = useGetTreinamentosByCategoria(
+    data?.treinamento.categoria.id
+  );
   console.log({ data: data });
   return (
     <div>
@@ -39,7 +45,22 @@ const ShowTreinamento = () => {
             maxWidth: "70%",
           }}
         />
-        <div className="flex-[1]">AAAAAAAAA</div>
+        <div className="flex-[1]">
+          <h1 className="font-bold text-lg text-pmmBlue">Relacionados:</h1>
+          <div className="flex flex-col gap-10 mt-8">
+            {treinamentosRelacionados?.treinamentos.map((treinamento) => (
+              <TreinamentoRelacionado
+                capa={treinamento.capa.url}
+                autor={treinamento.nome_do_autor}
+                data={treinamento.createdAt}
+                titulo={treinamento.titulo}
+                resumo={treinamento.resumo}
+                id={treinamento.id}
+                key={treinamento.id}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

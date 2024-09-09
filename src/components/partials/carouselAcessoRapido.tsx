@@ -25,7 +25,7 @@ const CarouselAcessoRapido = ({
         alt="Ruby"
       />
       <div className="flex justify-between text-xs font-semibold mt-2">
-        <p className="text-green-700">{autor}AUTOR TAL</p>
+        <p className="text-green-700">{autor}</p>
         <p className="text-pmmGray">{dayjs(data).format("DD/MM/YYYY")}</p>
       </div>
       <div className="flex flex-col gap-1 ">

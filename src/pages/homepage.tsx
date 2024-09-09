@@ -55,7 +55,7 @@ const Homepage = () => {
           Treinamentos recentes
         </h1>
       </div>
-      <Carousel className="mt-11">
+      <Carousel className="mt-4">
         <CarouselContent>
           {treinamentos.data?.treinamentos
             .slice(0, 5)
@@ -63,7 +63,7 @@ const Homepage = () => {
               <CarouselAcessoRapido
                 key={treinamento.id}
                 capa={treinamento.capa.url}
-                autor={treinamento.autor}
+                autor={treinamento.nome_do_autor}
                 data={treinamento.data_publicacao}
                 titulo={treinamento.titulo}
                 resumo={treinamento.resumo}
@@ -86,7 +86,7 @@ const Homepage = () => {
               {categoria.titulo}
             </h1>
           </div>
-          <Carousel className="mt-11">
+          <Carousel className="mt-4">
             <CarouselContent>
               {categoria.treinamentos
                 .slice(0, 5)
@@ -94,7 +94,7 @@ const Homepage = () => {
                   <CarouselAcessoRapido
                     key={treinamento.id}
                     capa={treinamento.capa.url}
-                    autor={treinamento.autor}
+                    autor={treinamento.nome_do_autor}
                     data={treinamento.data_publicacao}
                     titulo={treinamento.titulo}
                     resumo={treinamento.resumo}

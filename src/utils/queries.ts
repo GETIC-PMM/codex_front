@@ -25,6 +25,23 @@ export const useGetTreinamentosDestaque = () =>
     refetchOnWindowFocus: false,
   });
 
+export const useGetTreinamentosByCategoria = (
+  categoriaId: string | undefined
+) =>
+  useQuery({
+    queryKey: ["treinamentos_categoria", categoriaId],
+    queryFn: async () => {
+      const { data } = await axios.get(API_URL + `/treinamentos`, {
+        params: {
+          categoria_id: categoriaId,
+        },
+      });
+      return data;
+    },
+    refetchOnWindowFocus: false,
+    enabled: !!categoriaId,
+  });
+
 export const useGetTreinamentosAcessoRapido = () =>
   useQuery({
     queryKey: ["treinamentos_acesso_rapido"],

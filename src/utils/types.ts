@@ -21,6 +21,7 @@ export type TreinamentosType = {
   tags: GetTagsTYPE[];
   caregorias: GetCategoriasTYPE[];
   autor: string;
+  nome_do_autor: string;
   data_publicacao: string;
   capa: {
     url: string;
