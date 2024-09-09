@@ -31,16 +31,18 @@ const Homepage = () => {
     <div>
       <Carousel className="my-10">
         <CarouselContent>
-          {destaques.data?.treinamentos.map((destaque: TreinamentosType) => (
-            <CarouselHighlight
-              key={destaque.id}
-              tags={destaque.tags}
-              title={destaque.titulo}
-              description={destaque.resumo}
-              link={`/treinamento/${destaque.id}`}
-              capa={destaque.capa.url}
-            />
-          ))}
+          {destaques.data?.treinamentos
+            .slice(0, 5)
+            .map((destaque: TreinamentosType) => (
+              <CarouselHighlight
+                key={destaque.id}
+                tags={destaque.tags}
+                title={destaque.titulo}
+                description={destaque.resumo}
+                link={`/treinamento/${destaque.id}`}
+                capa={destaque.capa.url}
+              />
+            ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
@@ -51,9 +53,14 @@ const Homepage = () => {
         <span className="uppercase text-pmmBlue font-bold text-xs ">
           Acesso rápido
         </span>
-        <h1 className="text-pmmBlue text-4xl font-bold">
-          Treinamentos recentes
-        </h1>
+        <div className="w-full flex justify-between">
+          <h1 className="text-pmmBlue text-4xl font-bold">
+            Treinamentos recentes
+          </h1>
+          <a href="#" className="text-sm text-pmmBlue self-end hover:underline">
+            Visualizar todos &gt;
+          </a>
+        </div>
       </div>
       <Carousel className="mt-4">
         <CarouselContent>
@@ -82,9 +89,17 @@ const Homepage = () => {
             <span className="uppercase text-pmmBlue font-bold text-xs ">
               Acesso rápido - por categoria
             </span>
-            <h1 className="text-pmmBlue text-4xl font-bold">
-              {categoria.titulo}
-            </h1>
+            <div className="w-full flex justify-between">
+              <h1 className="text-pmmBlue text-4xl font-bold">
+                {categoria.titulo}
+              </h1>
+              <a
+                href="#"
+                className="text-sm text-pmmBlue self-end hover:underline"
+              >
+                Visualizar todos &gt;
+              </a>
+            </div>
           </div>
           <Carousel className="mt-4">
             <CarouselContent>
