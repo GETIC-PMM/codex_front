@@ -51,6 +51,7 @@ const formSchema = z.object({
   data_publicacao: z.string(),
   capa: z.string(),
   corpo: z.string(),
+  nome_do_autor: z.string(),
 });
 
 const formSchemaIdTitulo = z.object({
@@ -85,6 +86,7 @@ const NovoTreinamento = () => {
   const { keycloak } = useContext(KeycloakContext);
   const userId = keycloak?.idTokenParsed?.sub;
   const token = keycloak?.token;
+  const userName = keycloak?.idTokenParsed?.name;
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -178,6 +180,7 @@ const NovoTreinamento = () => {
   useEffect(() => {
     form.setValue("autor_id", userId as string);
     form.setValue("data_publicacao", new Date().toISOString());
+    form.setValue("nome_do_autor", userName as string);
   }, [userId]);
 
   useEffect(() => {

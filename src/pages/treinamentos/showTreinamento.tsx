@@ -26,7 +26,7 @@ const ShowTreinamento = () => {
           {data?.treinamento.titulo}
         </h1>
         <div className="text-xs text-zinc-600">
-          Claudio Trindade •{" "}
+          {data?.treinamento.nome_do_autor} •{" "}
           {dayjs(data?.treinamento.createdAt).format("DD/MM/YYYY")} •{" "}
           {data?.treinamento.categoria.titulo} •{" "}
           {data?.treinamento.tags
