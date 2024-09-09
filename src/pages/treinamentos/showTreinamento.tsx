@@ -48,17 +48,20 @@ const ShowTreinamento = () => {
         <div className="flex-[1]">
           <h1 className="font-bold text-lg text-pmmBlue">Relacionados:</h1>
           <div className="flex flex-col gap-10 mt-8">
-            {treinamentosRelacionados?.treinamentos.map((treinamento) => (
-              <TreinamentoRelacionado
-                capa={treinamento.capa.url}
-                autor={treinamento.nome_do_autor}
-                data={treinamento.createdAt}
-                titulo={treinamento.titulo}
-                resumo={treinamento.resumo}
-                id={treinamento.id}
-                key={treinamento.id}
-              />
-            ))}
+            {treinamentosRelacionados?.treinamentos.map((treinamento) => {
+              if (data?.treinamento.id !== treinamento.id)
+                return (
+                  <TreinamentoRelacionado
+                    capa={treinamento.capa.url}
+                    autor={treinamento.nome_do_autor}
+                    data={treinamento.createdAt}
+                    titulo={treinamento.titulo}
+                    resumo={treinamento.resumo}
+                    id={treinamento.id}
+                    key={treinamento.id}
+                  />
+                );
+            })}
           </div>
         </div>
       </div>
