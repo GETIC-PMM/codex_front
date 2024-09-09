@@ -67,9 +67,6 @@ const Header = ({
           />
         </div>
 
-        <a href="/" className="hover:underline">
-          Voltar para treinamentos
-        </a>
         <div className="flex gap-3 items-center">
           <Dialog>
             <DialogTrigger>
@@ -106,14 +103,14 @@ const Header = ({
             </DialogContent>
           </Dialog>
 
-          <div>
+          {/* <div>
             <img
               alt="Placeholder imagem do usuário"
               src={UserPicIcon}
               width={40}
               height={40}
             />
-          </div>
+          </div> */}
           <Button
             className="ml-2"
             onClick={() => {
