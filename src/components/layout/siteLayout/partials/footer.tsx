@@ -52,10 +52,13 @@ const Footer = () => {
                 <PiPhoneCallLight className="text-lg" />
                 (84) 99126-3533
               </p>
-              <p className="flex gap-3">
+              <a
+                href="mailto:direti.devs@gmail.com"
+                className="flex gap-3 hover:underline"
+              >
                 <CiMail className="text-lg" />
                 direti.devs@gmail.com
-              </p>
+              </a>
             </div>
           </div>
         </div>
