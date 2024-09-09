@@ -44,6 +44,10 @@ export const router = createBrowserRouter([
         element: <NovoTreinamento />,
       },
       {
+        path: "/painel/treinamentos/edit/:id",
+        element: <NovoTreinamento />,
+      },
+      {
         path: "/painel/categorias",
         element: <Categorias />,
       },

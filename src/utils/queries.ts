@@ -75,6 +75,17 @@ export const useGetCategorias = (props: Meta) =>
     refetchOnWindowFocus: false,
   });
 
+export const useGetTreinamentoById = (id: string | undefined) =>
+  useQuery({
+    queryKey: ["treinamento", id],
+    queryFn: async () => {
+      const { data } = await axios.get(API_URL + `/treinamentos/${id}`);
+      return data;
+    },
+    refetchOnWindowFocus: false,
+    enabled: !!id,
+  });
+
 export const useGetTags = (props: Meta) =>
   useQuery({
     queryKey: ["tags", props],

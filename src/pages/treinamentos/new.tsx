@@ -18,7 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetCategorias, useGetTags } from "@/utils/queries";
+import {
+  useGetCategorias,
+  useGetTags,
+  useGetTreinamentoById,
+} from "@/utils/queries";
 import {
   GetCategoriasTYPE,
   GetTagsTYPE,
@@ -32,7 +36,7 @@ import { KeycloakContext } from "@/services/useAuth";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { API_URL_ADMIN } from "@/utils/consts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import DefaultModal from "@/components/partials/defaultModal";
@@ -82,10 +86,30 @@ const NovoTreinamento = () => {
   const userId = keycloak?.idTokenParsed?.sub;
   const token = keycloak?.token;
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { data: categoriaExistente } = useGetTreinamentoById(id);
 
   const create = useMutation(
     async (data: Omit<GetTreinamentosTYPE, "id">) => {
       await axios.post(`${API_URL_ADMIN}/treinamentos`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        // setModal("");
+        // categorias.refetch();
+        navigate("/painel/treinamentos");
+      },
+    }
+  );
+
+  const edit = useMutation(
+    async (data: Omit<GetTreinamentosTYPE, "id">) => {
+      await axios.put(`${API_URL_ADMIN}/treinamentos/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -140,7 +164,14 @@ const NovoTreinamento = () => {
     }
   );
 
+  console.log({ form: form.getValues() });
+
   const onSubmit = () => {
+    if (id) {
+      edit.mutate(form.getValues());
+      return;
+    }
+
     create.mutate(form.getValues());
   };
 
@@ -169,7 +200,42 @@ const NovoTreinamento = () => {
     }
   }, [tags.data?.tags]);
 
-  console.log({ erros: form.formState.errors });
+  useEffect(() => {
+    if (categoriaExistente?.treinamento.categoria) {
+      form.setValue(
+        "categoria_id",
+        categoriaExistente.treinamento.categoria.id
+      );
+      form.setValue("autor_id", categoriaExistente.treinamento.autor_id);
+      form.setValue("titulo", categoriaExistente.treinamento.titulo);
+      form.setValue("resumo", categoriaExistente.treinamento.resumo);
+      form.setValue("corpo", categoriaExistente.treinamento.corpo);
+      form.setValue(
+        "destaque_home",
+        categoriaExistente.treinamento.destaque_home
+      );
+      setSelectedTags(
+        categoriaExistente.treinamento.tags.map((tag: any) => ({
+          label: tag.titulo,
+          value: tag.id,
+        }))
+      );
+      // set options tags without selected tags
+      setOptionsTags(
+        tags.data?.tags
+          .filter(
+            (tag: any) =>
+              !categoriaExistente.treinamento.tags.some(
+                (tagSelected: any) => tagSelected.id === tag.id
+              )
+          )
+          .map((tag: any) => ({
+            label: tag.titulo,
+            value: tag.id,
+          }))
+      );
+    }
+  }, [id, categoriaExistente]);
 
   return (
     <div>
@@ -280,6 +346,7 @@ const NovoTreinamento = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>

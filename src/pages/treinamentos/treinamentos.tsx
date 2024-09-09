@@ -39,7 +39,13 @@ const Treinamentos = () => {
     {
       cell: (row: GetTreinamentosTYPE) => (
         <div className="flex flex-row justify-center items-center p-2 gap-2">
-          <Button variant="alert" size="sm" onClick={() => {}}>
+          <Button
+            variant="alert"
+            size="sm"
+            onClick={() => {
+              navigate(`/painel/treinamentos/edit/${row.id}`);
+            }}
+          >
             <EditIcon />
           </Button>
           <Button
