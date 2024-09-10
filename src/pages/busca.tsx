@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
-import { useQuery } from "react-query";
-import { API_URL } from "@/utils/consts";
-import { GetTreinamentosTYPE, TreinamentosType } from "../utils/types";
-import Treinamento from "../components/partials/treinamento";
+import TreinamentoView from "../components/partials/treinamento";
 import {
   Select,
   SelectContent,
@@ -13,7 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetCategorias, useGetTags } from "@/utils/queries";
+import {
+  useGetCategorias,
+  useGetTags,
+  useGetTreinamentos,
+} from "@/utils/queries";
 
 const Busca = () => {
   const [selectedTag, setSelectedTag] = useState<string | undefined>();
@@ -21,40 +21,26 @@ const Busca = () => {
     string | undefined
   >();
 
-  const [search, setSearch] = useSearchParams();
+  const [search, setSearchParams] = useSearchParams();
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
 
   const busca = search.get("search");
 
-  const getData = useQuery({
-    queryKey: ["treinamentos, tags, categorias"],
-    queryFn: async () => {
-      const { data } = await axios.get<GetTreinamentosTYPE[]>(
-        `${API_URL}/treinamentos`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          params: {
-            search: search.get("search"),
-            categoria_id: search.get("categoria_id"),
-            tag_id: search.get("tag_id"),
-            searchBy: "all",
-          },
-        }
-      );
-      return data;
-    },
+  const treinamentoQuery = useGetTreinamentos({
+    search: search.get("search") ?? "",
+    tag_id: search.get("tag_id") ?? "",
+    categoria_id: search.get("categoria_id") ?? "",
+    dependent: false,
   });
 
   useEffect(() => {
-    getData.refetch();
-  }, [search.get("search")]);
-
-  const submitFiltrar = () => {
-    getData.refetch();
-  };
+    setSearchParams({
+      search: search.get("search") ?? "",
+      categoria_id: selectedCategoria ?? "",
+      tag_id: selectedTag ?? "",
+    });
+  }, [selectedCategoria, selectedTag]);
 
   return (
     <div>
@@ -78,17 +64,7 @@ const Busca = () => {
               <SelectContent>
                 <SelectGroup>
                   {categorias.data?.categorias.map((categoria) => (
-                    <SelectItem
-                      key={categoria.id}
-                      value={categoria.id}
-                      onClick={() => {
-                        setSearch({
-                          search: busca,
-                          categoria_id: categoria.id,
-                        });
-                        setSelectedCategoria(categoria.id);
-                      }}
-                    >
+                    <SelectItem key={categoria.id} value={categoria.id}>
                       {categoria.titulo}
                     </SelectItem>
                   ))}
@@ -103,14 +79,7 @@ const Busca = () => {
               <SelectContent>
                 <SelectGroup>
                   {tags.data?.tags.map((tag) => (
-                    <SelectItem
-                      key={tag.id}
-                      value={tag.id}
-                      onClick={() => {
-                        setSearch("tag", tag.id);
-                        setSelectedTag(tag.id);
-                      }}
-                    >
+                    <SelectItem key={tag.id} value={tag.id}>
                       {tag.titulo}
                     </SelectItem>
                   ))}
@@ -118,14 +87,14 @@ const Busca = () => {
               </SelectContent>
             </Select>
 
-            <button onClick={submitFiltrar}>Filtrar</button>
+            <button onClick={() => treinamentoQuery.refetch()}>Filtrar</button>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-10">
-        {getData.data?.treinamentos.map((treinamento: TreinamentosType) => {
+        {treinamentoQuery.data?.treinamentos.map((treinamento) => {
           return (
-            <Treinamento
+            <TreinamentoView
               key={treinamento.id}
               tags={treinamento.tags}
               capa={treinamento.capa}
@@ -139,13 +108,11 @@ const Busca = () => {
         })}
 
         <div className="flex flex-col gap-10 ms-8">
-          {getData.data?.treinamentos.map((treinamento: TreinamentosType) => {
+          {/* {treinamentoQuery.data?.treinamentos.map((treinamento) => {
             const a = treinamento.tags.map((tag) => tag.titulo).join(", ");
             const allTitles = new Set([a]);
             const uniqueTitles = Array.from(allTitles);
-
-            console.log(uniqueTitles);
-          })}
+          })} */}
 
           <div className="relative mt-11"></div>
 

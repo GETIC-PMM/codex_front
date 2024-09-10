@@ -1,4 +1,4 @@
-import { customStyles } from "@/utils/types";
+import { customStyles, ResponseMeta } from "@/utils/types";
 import { useEffect } from "react";
 import DataTable, { Alignment, TableProps } from "react-data-table-component";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
@@ -52,18 +52,13 @@ const LoaderComponent = () => {
   );
 };
 
+type Meta = ResponseMeta | null;
+
 function DataTableBase<T extends object>({
   meta,
   ...props
 }: TableProps<T> & {
-  meta: {
-    pagination: {
-      per_page: number;
-      total_pages: number;
-      total_objects: number;
-      links: { first: string; last: string; next: string; prev: string };
-    };
-  };
+  meta: Meta;
   hideButtonsOnBottom?: boolean;
 }) {
   const {
@@ -207,8 +202,8 @@ function DataTableBase<T extends object>({
         subHeaderAlign={Alignment.LEFT}
         {...props}
         customStyles={customStyles}
-        paginationTotalRows={meta && meta.pagination.total_objects}
-        paginationPerPage={meta ? meta.pagination.per_page : 10}
+        paginationTotalRows={meta ? meta.meta.pagination.total_objects : 0}
+        paginationPerPage={meta ? meta.meta.pagination.per_page : 10}
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
         onChangeRowsPerPage={(p) => setPerPage(p)}
         onChangePage={(p) => setPage(p)}

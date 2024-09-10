@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useMeta } from "@/services/useMeta";
 import { API_URL_ADMIN } from "@/utils/consts";
 import { useGetTags } from "@/utils/queries";
-import { GetTagsTYPE, ModalActions } from "@/utils/types";
+import { Tag, ModalActions } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useState } from "react";
@@ -39,7 +39,6 @@ const Tags = () => {
     per_page: perPage,
     page,
     search: debouncedSearch,
-    searchBy,
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,12 +48,12 @@ const Tags = () => {
   const columns = [
     {
       name: <>Titulo</>,
-      selector: (row: GetTagsTYPE) => row.titulo ?? "-",
+      selector: (row: Tag) => row.titulo ?? "-",
       sortable: true,
     },
 
     {
-      cell: (row: GetTagsTYPE) => (
+      cell: (row: Tag) => (
         <div className="flex flex-row justify-center items-center p-2 gap-2">
           <Button
             variant="alert"
@@ -102,7 +101,7 @@ const Tags = () => {
   );
 
   const create = useMutation(
-    async (data: Omit<GetTagsTYPE, "id">) => {
+    async (data: Omit<Tag, "id">) => {
       await axios.post(`${API_URL_ADMIN}/tags`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -118,7 +117,7 @@ const Tags = () => {
   );
 
   const edit = useMutation(
-    async (data: GetTagsTYPE) => {
+    async (data: Tag) => {
       await axios.put(`${API_URL_ADMIN}/tags/${data.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -196,12 +195,12 @@ const Tags = () => {
         </div>
       )}
       <div className="px-4">
-        <DataTableBase<GetTagsTYPE>
+        <DataTableBase<Tag>
           subHeader
           title={title}
           columns={columns}
           data={tags.isSuccess ? tags.data.tags : []}
-          meta={tags.isSuccess ? tags.data.meta : null}
+          meta={tags.isSuccess ? { meta: tags.data.meta } : null}
           progressPending={tags.isLoading}
         />
       </div>

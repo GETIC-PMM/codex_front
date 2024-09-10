@@ -1,10 +1,9 @@
 import Ruby from "@/assets/ruby.svg";
-import Header from "../layout/siteLayout/partials/header";
-import { GetTagsTYPE } from "@/utils/types";
+import { Tag } from "@/utils/types";
 import dayjs from "dayjs";
 import { BASE_URL } from "@/utils/consts";
 
-const Treinamento = ({
+const TreinamentoView = ({
   tags,
   capa,
   titulo,
@@ -13,7 +12,7 @@ const Treinamento = ({
   resumo,
   id,
 }: {
-  tags: GetTagsTYPE[];
+  tags: Tag[];
   capa: { url: string };
   titulo: string;
   nome_do_autor: string;
@@ -78,4 +77,4 @@ const Treinamento = ({
     </div>
   );
 };
-export default Treinamento;
+export default TreinamentoView;

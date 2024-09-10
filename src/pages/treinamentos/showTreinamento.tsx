@@ -27,7 +27,7 @@ const ShowTreinamento = () => {
         </h1>
         <div className="text-xs text-zinc-600">
           {data?.treinamento.nome_do_autor} •{" "}
-          {dayjs(data?.treinamento.createdAt).format("DD/MM/YYYY")} •{" "}
+          {dayjs(data?.treinamento.created_at).format("DD/MM/YYYY")} •{" "}
           {data?.treinamento.categoria.titulo} •{" "}
           {data?.treinamento.tags
             .map((tag: { titulo: string }) => tag.titulo)
@@ -54,7 +54,7 @@ const ShowTreinamento = () => {
                   <TreinamentoRelacionado
                     capa={treinamento.capa.url}
                     autor={treinamento.nome_do_autor}
-                    data={treinamento.createdAt}
+                    data={treinamento.created_at}
                     titulo={treinamento.titulo}
                     resumo={treinamento.resumo}
                     id={treinamento.id}

@@ -13,7 +13,6 @@ import {
   useGetTreinamentosDestaque,
 } from "@/utils/queries";
 import { KeycloakContext } from "@/services/useAuth";
-import { TreinamentosType } from "@/utils/types";
 
 const Homepage = () => {
   const { keycloak } = useContext(KeycloakContext);
@@ -31,18 +30,16 @@ const Homepage = () => {
     <div>
       <Carousel className="my-10">
         <CarouselContent>
-          {destaques.data?.treinamentos
-            .slice(0, 5)
-            .map((destaque: TreinamentosType) => (
-              <CarouselHighlight
-                key={destaque.id}
-                tags={destaque.tags}
-                title={destaque.titulo}
-                description={destaque.resumo}
-                link={`/treinamento/${destaque.id}`}
-                capa={destaque.capa.url}
-              />
-            ))}
+          {destaques.data?.treinamentos.slice(0, 5).map((destaque) => (
+            <CarouselHighlight
+              key={destaque.id}
+              tags={destaque.tags}
+              title={destaque.titulo}
+              description={destaque.resumo}
+              link={`/treinamento/${destaque.id}`}
+              capa={destaque.capa.url}
+            />
+          ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
@@ -64,19 +61,17 @@ const Homepage = () => {
       </div>
       <Carousel className="mt-4">
         <CarouselContent>
-          {treinamentos.data?.treinamentos
-            .slice(0, 5)
-            .map((treinamento: TreinamentosType) => (
-              <CarouselAcessoRapido
-                key={treinamento.id}
-                capa={treinamento.capa.url}
-                autor={treinamento.nome_do_autor}
-                data={treinamento.data_publicacao}
-                titulo={treinamento.titulo}
-                resumo={treinamento.resumo}
-                id={treinamento.id}
-              />
-            ))}
+          {treinamentos.data?.treinamentos.slice(0, 5).map((treinamento) => (
+            <CarouselAcessoRapido
+              key={treinamento.id}
+              capa={treinamento.capa.url}
+              autor={treinamento.nome_do_autor}
+              data={treinamento.data_publicacao}
+              titulo={treinamento.titulo}
+              resumo={treinamento.resumo}
+              id={treinamento.id}
+            />
+          ))}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
@@ -103,19 +98,17 @@ const Homepage = () => {
           </div>
           <Carousel className="mt-4">
             <CarouselContent>
-              {categoria.treinamentos
-                .slice(0, 5)
-                .map((treinamento: TreinamentosType) => (
-                  <CarouselAcessoRapido
-                    key={treinamento.id}
-                    capa={treinamento.capa.url}
-                    autor={treinamento.nome_do_autor}
-                    data={treinamento.data_publicacao}
-                    titulo={treinamento.titulo}
-                    resumo={treinamento.resumo}
-                    id={treinamento.id}
-                  />
-                ))}
+              {categoria.treinamentos.slice(0, 5).map((treinamento) => (
+                <CarouselAcessoRapido
+                  key={treinamento.id}
+                  capa={treinamento.capa.url}
+                  autor={treinamento.nome_do_autor}
+                  data={treinamento.data_publicacao}
+                  titulo={treinamento.titulo}
+                  resumo={treinamento.resumo}
+                  id={treinamento.id}
+                />
+              ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />

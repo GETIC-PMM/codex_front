@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useDebounce } from "use-debounce";
 
 type MetaContext = {
@@ -25,11 +26,11 @@ export const MetaContext = React.createContext<MetaContext>({
   setSearchBy: () => {},
 });
 
-// const datatablePages = [
-//   "/painel/tags",
-//   "/painel/categorias",
-//   "/painel/treinamentos",
-// ];
+const datatablePages = [
+  "/painel/tags",
+  "/painel/categorias",
+  "/painel/treinamentos",
+];
 
 const MetaProvider = ({ children }: { children: React.ReactNode }) => {
   const [perPage, setPerPage] = useState(10);
@@ -38,28 +39,18 @@ const MetaProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchBy, setSearchBy] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
 
-  // const isInDatatablePage = datatablePages.some(
-  //   (datatablePage) => location.pathname === datatablePage
-  // );
+  const { pathname } = useLocation();
 
-  // useEffect(() => {
-  //   if (keycloak.authenticated && isInDatatablePage) {
-  //     setSearchParams({
-  //       search: debouncedSearch,
-  //       searchBy,
-  //       page: String(page),
-  //       perPage: String(perPage),
-  //     });
-  //   }
-  // }, [
-  //   debouncedSearch,
-  //   searchBy,
-  //   page,
-  //   perPage,
-  //   keycloak.authenticated,
-  //   isInDatatablePage,
-  //   setSearchParams,
-  // ]);
+  useEffect(() => {
+    if (datatablePages.includes(pathname)) resetValues();
+  }, [pathname]);
+
+  const resetValues = () => {
+    setPerPage(10);
+    setPage(1);
+    setSearch("");
+    setSearchBy("");
+  };
 
   return (
     <MetaContext.Provider

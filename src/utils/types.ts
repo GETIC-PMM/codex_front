@@ -2,38 +2,43 @@ import { TableStyles } from "react-data-table-component";
 
 export type ModalActions = "" | "create" | "edit" | "delete";
 
-export type GetTreinamentosTYPE = {
-  id: string;
+export type TreinamentoBase = {
   titulo: string;
   resumo: string;
-  tag_ids?: string[];
-  caregoria_id?: string;
   autor_id: string;
-  data_publicacao: string;
-  capa: string;
-  corpo: string;
-};
-
-export type TreinamentosType = {
-  id: string;
-  titulo: string;
-  resumo: string;
-  tags: GetTagsTYPE[];
-  caregorias: GetCategoriasTYPE[];
   nome_do_autor: string;
   data_publicacao: string;
-  capa: {
-    url: string;
-  };
   corpo: string;
 };
 
-export type GetCategoriasTYPE = {
+export type TreinamentoPost = {
+  tag_ids?: string[];
+  categoria_id?: string;
+  capa: string;
+} & TreinamentoBase;
+
+export type Treinamento = {
+  id: string;
+  tags: Tag[];
+  categoria: Categoria;
+  capa: ImageUrl;
+  thumbnail: ImageUrl;
+  created_at: string;
+  updated_at: string;
+} & TreinamentoBase;
+
+type ImageUrl = { url: string };
+
+export type Categoria = {
   id: string;
   titulo: string;
 };
 
-export type GetTagsTYPE = {
+export type CategoriaWithTreinamentos = Categoria & {
+  treinamentos: Treinamento[];
+};
+
+export type Tag = {
   id: string;
   titulo: string;
 };
@@ -43,10 +48,31 @@ export type Meta =
       per_page: number;
       page: number;
       search: string;
-      searchBy: string;
     }
   | { per_page: "all" }
-  | { search: string; searchBy: "all" };
+  | { search: string };
+
+export type ResponseMeta = {
+  meta: {
+    pagination: {
+      per_page: number;
+      total_pages: number;
+      total_objects: number;
+      links: {
+        next?: string;
+        previous?: string;
+        first: string;
+        last: string;
+      };
+    };
+  };
+};
+
+export type ResponseData<K extends string, T> = {
+  [key in K]: T;
+};
+
+export type Response<K extends string, T> = ResponseData<K, T> & ResponseMeta;
 
 export const customStyles: TableStyles = {
   headCells: {

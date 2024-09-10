@@ -24,10 +24,11 @@ import {
   useGetTreinamentoById,
 } from "@/utils/queries";
 import {
-  GetCategoriasTYPE,
-  GetTagsTYPE,
-  GetTreinamentosTYPE,
+  Categoria,
+  Tag,
+  Treinamento,
   ModalActions,
+  TreinamentoPost,
 } from "@/utils/types";
 import PickList, { LabelValue } from "@/components/partials/pickList";
 import { useContext, useEffect, useState } from "react";
@@ -96,7 +97,7 @@ const NovoTreinamento = () => {
   const { data: categoriaExistente } = useGetTreinamentoById(id);
 
   const create = useMutation(
-    async (data: Omit<GetTreinamentosTYPE, "id">) => {
+    async (data: TreinamentoPost) => {
       await axios.post(`${API_URL_ADMIN}/treinamentos`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -113,7 +114,7 @@ const NovoTreinamento = () => {
   );
 
   const edit = useMutation(
-    async (data: Omit<GetTreinamentosTYPE, "id">) => {
+    async (data: TreinamentoPost) => {
       await axios.put(`${API_URL_ADMIN}/treinamentos/${id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -130,7 +131,7 @@ const NovoTreinamento = () => {
   );
 
   const createCategoria = useMutation(
-    async (data: Omit<GetCategoriasTYPE, "id">) => {
+    async (data: Omit<Categoria, "id">) => {
       await axios.post(`${API_URL_ADMIN}/categorias`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -150,7 +151,7 @@ const NovoTreinamento = () => {
   );
 
   const createTag = useMutation(
-    async (data: Omit<GetTagsTYPE, "id">) => {
+    async (data: Omit<Tag, "id">) => {
       await axios.post(`${API_URL_ADMIN}/tags`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -225,19 +226,20 @@ const NovoTreinamento = () => {
         }))
       );
       // set options tags without selected tags
-      setOptionsTags(
-        tags.data?.tags
-          .filter(
-            (tag: any) =>
-              !categoriaExistente.treinamento.tags.some(
-                (tagSelected: any) => tagSelected.id === tag.id
-              )
-          )
-          .map((tag: any) => ({
-            label: tag.titulo,
-            value: tag.id,
-          }))
-      );
+      tags.isSuccess &&
+        setOptionsTags(
+          tags.data?.tags
+            .filter(
+              (tag: Tag) =>
+                !categoriaExistente.treinamento.tags.some(
+                  (selectedTag: Tag) => selectedTag.id === tag.id
+                )
+            )
+            .map((tag: Tag) => ({
+              label: tag.titulo,
+              value: tag.id,
+            }))
+        );
     }
   }, [id, categoriaExistente]);
 
@@ -359,7 +361,7 @@ const NovoTreinamento = () => {
                     </FormControl>
                     <SelectContent>
                       {categorias.data?.categorias.map(
-                        (categoria: GetCategoriasTYPE) => (
+                        (categoria: Categoria) => (
                           <SelectItem key={categoria.id} value={categoria.id}>
                             {categoria.titulo}
                           </SelectItem>

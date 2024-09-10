@@ -1,6 +1,6 @@
 import { BASE_URL } from "@/utils/consts";
 import { CarouselItem } from "../ui/carousel";
-import { GetTagsTYPE } from "@/utils/types";
+import { Tag } from "@/utils/types";
 
 const CarouselHighlight = ({
   tags,
@@ -9,7 +9,7 @@ const CarouselHighlight = ({
   link,
   capa,
 }: {
-  tags: GetTagsTYPE[];
+  tags: Tag[];
   title: string;
   description: string;
   link: string;

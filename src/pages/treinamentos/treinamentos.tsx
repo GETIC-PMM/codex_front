@@ -8,7 +8,7 @@ import { KeycloakContext } from "@/services/useAuth";
 import { useMeta } from "@/services/useMeta";
 import { API_URL_ADMIN } from "@/utils/consts";
 import { useGetTreinamentos } from "@/utils/queries";
-import { GetTreinamentosTYPE, ModalActions } from "@/utils/types";
+import { Treinamento, ModalActions } from "@/utils/types";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useMutation } from "react-query";
@@ -18,7 +18,7 @@ const Treinamentos = () => {
   const navigate = useNavigate();
   const { keycloak } = useContext(KeycloakContext);
   const token = keycloak?.token;
-  const { perPage, page, searchBy, debouncedSearch } = useMeta();
+  const { perPage, page, debouncedSearch } = useMeta();
   const [modal, setModal] = useState<ModalActions>("");
   const [idToDelete, setIdToDelete] = useState<string>("");
 
@@ -26,18 +26,17 @@ const Treinamentos = () => {
     per_page: perPage,
     page,
     search: debouncedSearch,
-    searchBy,
   });
 
   const columns = [
     {
       name: <>Titulo</>,
-      selector: (row: GetTreinamentosTYPE) => row.titulo ?? "-",
+      selector: (row: Treinamento) => row.titulo ?? "-",
       sortable: true,
     },
 
     {
-      cell: (row: GetTreinamentosTYPE) => (
+      cell: (row: Treinamento) => (
         <div className="flex flex-row justify-center items-center p-2 gap-2">
           <Button
             variant="alert"
@@ -118,12 +117,14 @@ const Treinamentos = () => {
           isLoading={deleteData.isLoading}
         />
         <div className="px-4">
-          <DataTableBase<GetTreinamentosTYPE>
+          <DataTableBase<Treinamento>
             subHeader
             title={titleValorAuxiliar}
             columns={columns}
             data={treinamentos.isSuccess ? treinamentos.data.treinamentos : []}
-            meta={treinamentos.isSuccess ? treinamentos.data.meta : null}
+            meta={
+              treinamentos.isSuccess ? { meta: treinamentos.data.meta } : null
+            }
             progressPending={treinamentos.isLoading}
           />
         </div>

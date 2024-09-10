@@ -6,7 +6,7 @@ import DefaultModal from "@/components/partials/defaultModal";
 import { Button } from "@/components/ui/button";
 import { API_URL_ADMIN } from "@/utils/consts";
 import { useGetCategorias } from "@/utils/queries";
-import { GetCategoriasTYPE, ModalActions } from "@/utils/types";
+import { Categoria, ModalActions } from "@/utils/types";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useState } from "react";
@@ -33,13 +33,12 @@ const Categorias = () => {
   const [modal, setModal] = useState<ModalActions>("");
   const token = localStorage.getItem("token");
 
-  const { perPage, page, searchBy, debouncedSearch } = useMeta();
+  const { perPage, page, debouncedSearch } = useMeta();
 
   const categorias = useGetCategorias({
     per_page: perPage,
     page,
     search: debouncedSearch,
-    searchBy,
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,12 +48,12 @@ const Categorias = () => {
   const columns = [
     {
       name: <>Titulo</>,
-      selector: (row: GetCategoriasTYPE) => row.titulo ?? "-",
+      selector: (row: Categoria) => row.titulo ?? "-",
       sortable: true,
     },
 
     {
-      cell: (row: GetCategoriasTYPE) => (
+      cell: (row: Categoria) => (
         <div className="flex flex-row justify-center items-center p-2 gap-2">
           <Button
             variant="alert"
@@ -102,7 +101,7 @@ const Categorias = () => {
   );
 
   const create = useMutation(
-    async (data: Omit<GetCategoriasTYPE, "id">) => {
+    async (data: Omit<Categoria, "id">) => {
       await axios.post(`${API_URL_ADMIN}/categorias`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -118,7 +117,7 @@ const Categorias = () => {
   );
 
   const edit = useMutation(
-    async (data: GetCategoriasTYPE) => {
+    async (data: Categoria) => {
       await axios.put(`${API_URL_ADMIN}/categorias/${data.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -197,12 +196,12 @@ const Categorias = () => {
         </div>
       )}
       <div className="px-4">
-        <DataTableBase<GetCategoriasTYPE>
+        <DataTableBase<Categoria>
           subHeader
           title={title}
           columns={columns}
           data={categorias.isSuccess ? categorias.data.categorias : []}
-          meta={categorias.isSuccess ? categorias.data.meta : null}
+          meta={categorias.isSuccess ? { meta: categorias.data.meta } : null}
           progressPending={categorias.isFetching}
         />
       </div>
