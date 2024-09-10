@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/utils/consts";
 import { CarouselItem } from "../ui/carousel";
 import { Tag } from "@/utils/types";
+import { useNavigate } from "react-router-dom";
 
 const CarouselHighlight = ({
   tags,
@@ -15,6 +16,7 @@ const CarouselHighlight = ({
   link: string;
   capa: string;
 }) => {
+  const navigate = useNavigate();
   return (
     <CarouselItem className="relative">
       <img
@@ -25,9 +27,12 @@ const CarouselHighlight = ({
       <div className="absolute right-10 bottom-10 text-white flex flex-col items-end gap-4 max-w-[400px]">
         <div className="flex gap-2 text-black text-xs">
           {tags.map((tag) => (
-            <div className="rounded-full py-1 px-8 bg-white hover:bg-zinc-300 cursor-pointer">
+            <button
+              onClick={() => navigate(`busca?tag_id=${tag.id}`)}
+              className="rounded-full py-1 px-8 bg-white hover:bg-zinc-300 cursor-pointer"
+            >
               {tag.titulo}
-            </div>
+            </button>
           ))}
         </div>
 
