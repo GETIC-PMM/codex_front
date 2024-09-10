@@ -54,7 +54,10 @@ const Homepage = () => {
           <h1 className="text-pmmBlue text-4xl font-bold">
             Treinamentos recentes
           </h1>
-          <a href="#" className="text-sm text-pmmBlue self-end hover:underline">
+          <a
+            href="/busca"
+            className="text-sm text-pmmBlue self-end hover:underline"
+          >
             Visualizar todos &gt;
           </a>
         </div>
@@ -89,7 +92,7 @@ const Homepage = () => {
                 {categoria.titulo}
               </h1>
               <a
-                href="#"
+                href={`/busca?categoria_id=${categoria.id}`}
                 className="text-sm text-pmmBlue self-end hover:underline"
               >
                 Visualizar todos &gt;
