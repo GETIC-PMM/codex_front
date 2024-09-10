@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import AddFileIcon from "../../../assets/file-blank-add-plus.png";
+import AddFileIcon from "../../assets/file-blank-add-plus.png";
 import { Button, buttonVariants } from "./button";
 
 import { useState } from "react";
