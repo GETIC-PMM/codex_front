@@ -16,12 +16,12 @@ import {
 } from "@/utils/queries";
 
 const Busca = () => {
-  const [selectedTag, setSelectedTag] = useState<string | undefined>();
-  const [selectedCategoria, setSelectedCategoria] = useState<
-    string | undefined
-  >();
-
   const [search, setSearchParams] = useSearchParams();
+  const [selectedTag, setSelectedTag] = useState(search.get("tag_id") ?? "");
+  const [selectedCategoria, setSelectedCategoria] = useState(
+    search.get("categoria_id") ?? ""
+  );
+
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
 
@@ -37,8 +37,8 @@ const Busca = () => {
   useEffect(() => {
     setSearchParams({
       search: search.get("search") ?? "",
-      categoria_id: selectedCategoria ?? "",
-      tag_id: selectedTag ?? "",
+      categoria_id: selectedCategoria,
+      tag_id: selectedTag,
     });
   }, [selectedCategoria, selectedTag]);
 
