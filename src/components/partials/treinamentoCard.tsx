@@ -2,6 +2,7 @@ import { Tag } from "@/utils/types";
 import dayjs from "dayjs";
 import { BASE_URL } from "@/utils/consts";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { parseSearchParams } from "@/utils/functions";
 
 const TreinamentoCard = ({
   tags,
@@ -23,7 +24,7 @@ const TreinamentoCard = ({
   categoria: { id: string; titulo: string };
 }) => {
   const navigate = useNavigate();
-  const [_, setSearch] = useSearchParams();
+  const [search, setSearch] = useSearchParams();
   return (
     <div className="flex w-full gap-10">
       <img
@@ -34,11 +35,17 @@ const TreinamentoCard = ({
           navigate(`/treinamento/${id}`);
         }}
       />
-      <div className="flex-[2] ">
+      <div className="flex-[2]">
         <div className="flex flex-col w-full">
           <div className="flex justify-between gap-2 mt-2">
             <button
-              onClick={() => setSearch(() => ({ categoria_id: categoria.id }))}
+              onClick={() =>
+                setSearch(() => ({
+                  ...parseSearchParams(search),
+                  page: "1",
+                  categoria_id: categoria.id,
+                }))
+              }
               className="font-bold hover:underline cursor-pointer text-green-700 text-xs"
             >
               {categoria.titulo}
@@ -48,7 +55,13 @@ const TreinamentoCard = ({
               {tags.map((tag) => {
                 return (
                   <button
-                    onClick={() => setSearch(() => ({ tag_id: tag.id }))}
+                    onClick={() =>
+                      setSearch(() => ({
+                        ...parseSearchParams(search),
+                        page: "1",
+                        tag_id: tag.id,
+                      }))
+                    }
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-10 rounded-full hover:underline"
                   >
                     {tag.titulo}

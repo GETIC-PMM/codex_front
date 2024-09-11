@@ -68,6 +68,10 @@ const Busca = () => {
   }, [search]);
 
   useEffect(() => {
+    setPage(Number(search.get("page")) ?? 1);
+  }, [search.get("page")]);
+
+  useEffect(() => {
     if (categoria) {
       setSelectedCategoria(categoria);
     }
