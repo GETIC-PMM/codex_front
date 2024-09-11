@@ -41,17 +41,17 @@ const Homepage = () => {
             />
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="hidden sm:block" />
+        <CarouselNext className="hidden sm:block" />
       </Carousel>
 
       <div className="w-8 h-1 bg-green-600 rounded-full"></div>
       <div className="mt-4">
-        <span className="uppercase text-pmmBlue font-bold text-xs ">
+        <span className="uppercase text-pmmBlue/50 font-bold text-xs ">
           Acesso rápido
         </span>
         <div className="w-full flex justify-between">
-          <h1 className="text-pmmBlue text-4xl font-bold">
+          <h1 className="text-pmmBlue sm:text-4xl font-bold">
             Treinamentos recentes
           </h1>
           <a
@@ -76,19 +76,19 @@ const Homepage = () => {
             />
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="hidden sm:block" />
+        <CarouselNext className="hidden sm:block" />
       </Carousel>
 
       {acessoRapido.data?.categorias.map((categoria) => (
         <>
           <div className="w-8 h-1 bg-green-600 rounded-full mt-24"></div>
           <div className="mt-4">
-            <span className="uppercase text-pmmBlue font-bold text-xs ">
+            <span className="uppercase text-pmmBlue/50 font-bold text-xs">
               Acesso rápido - por categoria
             </span>
             <div className="w-full flex justify-between">
-              <h1 className="text-pmmBlue text-4xl font-bold">
+              <h1 className="text-pmmBlue sm:text-4xl font-bold">
                 {categoria.titulo}
               </h1>
               <a
@@ -113,8 +113,8 @@ const Homepage = () => {
                 />
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden sm:block" />
+            <CarouselNext className="hidden sm:block" />
           </Carousel>
         </>
       ))}

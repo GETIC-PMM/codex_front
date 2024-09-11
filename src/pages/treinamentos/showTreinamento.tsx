@@ -40,17 +40,19 @@ const ShowTreinamento = () => {
             .join(", ")}
         </div>
       </div>
-      <div className="flex mt-10 gap-10 max-w-[1200px]">
+      <div className="flex flex-col sm:flex-row mt-10 gap-10 max-w-[1200px]">
         <MDEditor.Markdown
           source={data?.treinamento.corpo}
+          className="sm:max-w-[70%]"
           style={{
             flex: 3,
             whiteSpace: "pre-wrap",
             backgroundColor: "transparent",
             color: "black",
-            maxWidth: "70%",
+            // maxWidth: "70%",
           }}
         />
+        <hr />
         <div className="flex-[1]">
           <h1 className="font-bold text-lg text-pmmBlue">Relacionados:</h1>
           <div className="flex flex-col gap-10 mt-8">

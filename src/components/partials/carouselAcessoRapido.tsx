@@ -20,7 +20,7 @@ const CarouselAcessoRapido = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <CarouselItem className="basis-1/3 text-pmmBlue">
+    <CarouselItem className="basis-[90%] sm:basis-1/3 text-pmmBlue">
       <img
         src={`${BASE_URL}${capa}`}
         className="rounded-md cursor-pointer object-cover w-full h-52 aspect-video"

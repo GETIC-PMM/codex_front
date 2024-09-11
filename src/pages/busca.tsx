@@ -110,16 +110,16 @@ const Busca = () => {
         <span className="uppercase text-pmmBlue font-bold text-xs ">
           TREINAMENTO
         </span>
-        <div className="flex flex-2 justify-between  gap-2">
+        <div className="flex flex-col sm:flex-row flex-2 justify-between  gap-2">
           <h1 className="text-pmmBlue text-4xl font-bold">
             {busca ? `Resultados para: ${busca}` : "Resultados"}
           </h1>
-          <div className="flex justify-between gap-2">
+          <div className="flex flex-col sm:flex-row justify-between gap-2">
             <Select
               value={selectedCategoria}
               onValueChange={setSelectedCategoria}
             >
-              <SelectTrigger className="w-[300px]">
+              <SelectTrigger className="w-full sm:w-[300px]">
                 <SelectValue placeholder="Filtrar por categoria" />
               </SelectTrigger>
               <SelectContent>
@@ -134,7 +134,7 @@ const Busca = () => {
             </Select>
 
             <Select value={selectedTag} onValueChange={setSelectedTag}>
-              <SelectTrigger className="w-[300px]">
+              <SelectTrigger className="w-full sm:w-[300px]">
                 <SelectValue placeholder="Filtrar por tag" />
               </SelectTrigger>
               <SelectContent>
@@ -174,7 +174,7 @@ const Busca = () => {
 
         <div className="flex flex-col gap-10">
           <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3">
-            <div className="flex flex-1 justify-between sm:hidden">
+            {/* <div className="flex flex-1 justify-between sm:hidden">
               <a
                 href="#"
                 className="relative inline-flex items-center rounded-md border border-gray-300 bg-white  py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -187,8 +187,8 @@ const Busca = () => {
               >
                 Próximo
               </a>
-            </div>
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+            </div> */}
+            <div className="flex flex-1 items-center justify-between">
               <div>
                 <p className="text-sm text-gray-700">
                   Mostrando{" "}
