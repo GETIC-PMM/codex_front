@@ -94,7 +94,7 @@ const Navbar = ({
 
         <button
           onClick={() => {
-            navigate("/painel/tags");
+            navigate("/");
           }}
           className={`flex items-center bg-blue-950 py-2 hover:border-l-4 w-full h-10 border-blue-950 border-l-2 hover:bg-blue-900`}
         >

@@ -37,26 +37,12 @@ const Busca = () => {
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
 
-  const busca = search.get("search");
-  const categoria = search.get("categoria");
-  const tag = search.get("tag");
-
   const treinamentoQuery = useGetTreinamentos({
     search: search.get("search") ?? "",
     tag_id: search.get("tag_id") ?? "",
     categoria_id: search.get("categoria_id") ?? "",
     page: page ?? 1,
   });
-
-  const _nextPage =
-    treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
-  const _nextPageParams = new URLSearchParams(_nextPage);
-  const nextPage = _nextPageParams.get("page") ?? undefined;
-
-  const _lastPage =
-    treinamentoQuery.data?.meta.pagination.links.last.split("?")[1];
-  const _lastPageParams = new URLSearchParams(_lastPage);
-  const lastPage = _lastPageParams.get("page") ?? undefined;
 
   const submitFiltrar = () => {
     setSearchParams({
@@ -82,6 +68,10 @@ const Busca = () => {
   }, [search]);
 
   useEffect(() => {
+    setPage(Number(search.get("page")) ?? 1);
+  }, [search.get("page")]);
+
+  useEffect(() => {
     if (categoria) {
       setSelectedCategoria(categoria);
     }
@@ -91,6 +81,28 @@ const Busca = () => {
     treinamentoQuery.refetch();
   }, []);
 
+  const busca = search.get("search");
+  const categoria = search.get("categoria");
+  const tag = search.get("tag");
+
+  const _nextPage =
+    treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
+  const _nextPageParams = new URLSearchParams(_nextPage);
+  const nextPage = _nextPageParams.get("page") ?? undefined;
+
+  const _lastPage =
+    treinamentoQuery.data?.meta.pagination.links.last.split("?")[1];
+  const _lastPageParams = new URLSearchParams(_lastPage);
+  const lastPage = _lastPageParams.get("page") ?? undefined;
+
+  const totalRows =
+    page === treinamentoQuery.data?.meta.pagination.total_pages
+      ? treinamentoQuery.data?.meta.pagination.total_objects
+      : page * treinamentoQuery.data?.meta.pagination.per_page!;
+
+  const firstRowIndex =
+    (page - 1) * treinamentoQuery.data?.meta.pagination.per_page! + 1;
+
   return (
     <div>
       <div className="mt-4 mb-8">
@@ -98,16 +110,16 @@ const Busca = () => {
         <span className="uppercase text-pmmBlue font-bold text-xs ">
           TREINAMENTO
         </span>
-        <div className="flex flex-2 justify-between  gap-2">
+        <div className="flex flex-col sm:flex-row flex-2 justify-between  gap-2">
           <h1 className="text-pmmBlue text-4xl font-bold">
             {busca ? `Resultados para: ${busca}` : "Resultados"}
           </h1>
-          <div className="flex justify-between gap-2">
+          <div className="flex flex-col sm:flex-row justify-between gap-2">
             <Select
               value={selectedCategoria}
               onValueChange={setSelectedCategoria}
             >
-              <SelectTrigger className="w-[300px]">
+              <SelectTrigger className="w-full sm:w-[300px]">
                 <SelectValue placeholder="Filtrar por categoria" />
               </SelectTrigger>
               <SelectContent>
@@ -122,7 +134,7 @@ const Busca = () => {
             </Select>
 
             <Select value={selectedTag} onValueChange={setSelectedTag}>
-              <SelectTrigger className="w-[300px]">
+              <SelectTrigger className="w-full sm:w-[300px]">
                 <SelectValue placeholder="Filtrar por tag" />
               </SelectTrigger>
               <SelectContent>
@@ -162,7 +174,7 @@ const Busca = () => {
 
         <div className="flex flex-col gap-10">
           <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3">
-            <div className="flex flex-1 justify-between sm:hidden">
+            {/* <div className="flex flex-1 justify-between sm:hidden">
               <a
                 href="#"
                 className="relative inline-flex items-center rounded-md border border-gray-300 bg-white  py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -175,29 +187,13 @@ const Busca = () => {
               >
                 Próximo
               </a>
-            </div>
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+            </div> */}
+            <div className="flex flex-1 items-center justify-between">
               <div>
                 <p className="text-sm text-gray-700">
                   Mostrando{" "}
                   <span className="font-medium">
-                    {/* show range of the first item to the last according to pagination offset */}
-                    {`${
-                      page ===
-                      treinamentoQuery.data?.meta.pagination.total_pages
-                        ? (page - 1) *
-                            treinamentoQuery.data?.meta.pagination.per_page +
-                          1
-                        : (page - 1) *
-                            treinamentoQuery.data?.meta.pagination.per_page! +
-                          1
-                    }-${
-                      page ===
-                      treinamentoQuery.data?.meta.pagination.total_pages
-                        ? treinamentoQuery.data?.meta.pagination.total_objects
-                        : page *
-                          treinamentoQuery.data?.meta.pagination.per_page!
-                    }`}{" "}
+                    {`${firstRowIndex}-${totalRows}`}{" "}
                   </span>{" "}
                   de {treinamentoQuery.data?.meta.pagination.total_objects}{" "}
                   resultados

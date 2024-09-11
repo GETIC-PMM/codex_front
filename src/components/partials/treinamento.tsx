@@ -1,11 +1,10 @@
 import { Tag } from "@/utils/types";
 import dayjs from "dayjs";
 import { BASE_URL } from "@/utils/consts";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { parseSearchParams } from "@/utils/functions";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "../ui/badge";
 
-const TreinamentoCard = ({
+const TreinamentoView = ({
   tags,
   capa,
   titulo,
@@ -25,9 +24,8 @@ const TreinamentoCard = ({
   categoria: { id: string; titulo: string };
 }) => {
   const navigate = useNavigate();
-  const [search, setSearch] = useSearchParams();
   return (
-    <div className="flex flex-col sm:flex-row w-full sm:gap-10">
+    <div className="flex w-full gap-10">
       <img
         src={`${BASE_URL}${capa.url}`}
         className="rounded-md object-cover cursor-pointer max-w-96 h-full aspect-video flex-[1]"
@@ -36,37 +34,21 @@ const TreinamentoCard = ({
           navigate(`/treinamento/${id}`);
         }}
       />
-      <div className="flex-[2]">
+      <div className="flex-[2] ">
         <div className="flex flex-col w-full">
-          <div className="flex justify-between gap-2 mt-2">
-            <button
-              onClick={() =>
-                setSearch(() => ({
-                  ...parseSearchParams(search),
-                  page: "1",
-                  categoria_id: categoria.id,
-                }))
-              }
+          <div className="flex justify-between gap-2">
+            <a
               className="font-bold hover:underline cursor-pointer text-green-700 text-xs"
+              href={`/busca?categoria_id=${categoria.id}`}
             >
               {categoria.titulo}
-            </button>
+            </a>
 
-            <div className="flex gap-2 text-xs">
+            <div className="flex gap-4 text-xs">
               {tags.map((tag) => {
                 return (
-                  <Badge
-                    onClick={() =>
-                      setSearch(() => ({
-                        ...parseSearchParams(search),
-                        page: "1",
-                        tag_id: tag.id,
-                      }))
-                    }
-                    variant={"outline"}
-                    className="hover:bg-blue-700/15 text-pmmBlue"
-                  >
-                    {tag.titulo}
+                  <Badge className="hover:underline">
+                    <a href={`/busca?tag_id=${tag.id}`}>{tag.titulo}</a>
                   </Badge>
                 );
               })}
@@ -88,7 +70,7 @@ const TreinamentoCard = ({
         </div>
 
         <div className="mt-5">
-          <span className="text-sm text-zinc-600">{resumo}</span>
+          <span className="text-sm text-pmmBlue ">{resumo}</span>
           <div className="flex justify-end gap-4 mt-4">
             <a
               href={`/treinamento/${id}`}
@@ -102,4 +84,4 @@ const TreinamentoCard = ({
     </div>
   );
 };
-export default TreinamentoCard;
+export default TreinamentoView;

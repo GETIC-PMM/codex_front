@@ -9,14 +9,14 @@ const Footer = () => {
   // always on bottom
   return (
     <footer className="w-full">
-      <div className="w-full pt-16 pb-8 mt-10">
+      <div className="w-full pt-16 pb-8 mt-10 px-4 sm:px-0">
         <div
           className={`w-full max-w-[1200px] gap-6 my-20 text-zinc-600 mx-auto flex items-center justify-center flex-col text-sm`}
         >
-          <h1 className="text-4xl text-pmmBlue">
+          <h1 className="text-4xl text-pmmBlue text-center">
             Compartilhe seu conhecimento
           </h1>
-          <span>
+          <span className="text-center">
             Clique no botão abaixo para acessar o painel administrativo e criar
             um novo treinamento
           </span>
@@ -25,9 +25,9 @@ const Footer = () => {
           </a>
         </div>
       </div>
-      <div className="w-full bg-pmmBlue text-white pt-16 pb-8 mt-10">
+      <div className="w-full bg-pmmBlue text-white pt-16 pb-8 mt-10 px-4 sm:px-0">
         <div
-          className={`w-full max-w-[1200px] mx-auto flex items-center justify-between  gap-36 text-sm`}
+          className={`w-full max-w-[1200px] mx-auto flex flex-col sm:flex-row items-center justify-between  gap-36 text-sm`}
         >
           <div className="flex-[2] flex flex-col gap-7">
             <img src={DiretiLogoWhite} width={250} alt="Direti Logo" />
@@ -41,7 +41,7 @@ const Footer = () => {
               target="_blank"
               href="https://api.whatsapp.com/send?phone=5584991263533"
               className={
-                "bg-green-600 w-max py-3 rounded px-10 hover:bg-green-500"
+                "bg-green-600 w-max py-3 rounded px-10 self-center sm:self-auto hover:bg-green-500"
               }
             >
               Entrar em contato
