@@ -14,7 +14,12 @@ import {
 export const useGetTreinamentos = ({
   dependent = true,
   ...props
-}: Meta & { categoria_id?: string; tag_id?: string; dependent?: boolean }) =>
+}: Meta & {
+  categoria_id?: string;
+  tag_id?: string;
+  dependent?: boolean;
+  page?: number;
+}) =>
   useQuery({
     queryKey: [
       "treinamentos",

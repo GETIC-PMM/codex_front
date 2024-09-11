@@ -1,6 +1,7 @@
 import { CarouselItem } from "@/components/ui/carousel";
 import { BASE_URL } from "@/utils/consts";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const CarouselAcessoRapido = ({
   capa,
@@ -17,12 +18,16 @@ const CarouselAcessoRapido = ({
   resumo: string;
   id: string;
 }) => {
+  const navigate = useNavigate();
   return (
     <CarouselItem className="basis-1/3 text-pmmBlue">
       <img
         src={`${BASE_URL}${capa}`}
-        className="rounded-md object-cover w-full h-52 aspect-video"
+        className="rounded-md cursor-pointer object-cover w-full h-52 aspect-video"
         alt="Ruby"
+        onClick={() => {
+          navigate(`/treinamento/${id}`);
+        }}
       />
       <div className="flex justify-between text-xs font-semibold mt-2">
         <p className="text-green-700">{autor}</p>

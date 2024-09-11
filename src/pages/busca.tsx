@@ -14,6 +14,9 @@ import {
   useGetTags,
   useGetTreinamentos,
 } from "@/utils/queries";
+import { Button } from "@/components/ui/button";
+import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
+import { cn } from "@/lib/utils";
 
 const Busca = () => {
   const [search, setSearchParams] = useSearchParams();
@@ -21,26 +24,58 @@ const Busca = () => {
   const [selectedCategoria, setSelectedCategoria] = useState(
     search.get("categoria_id") ?? ""
   );
+  const [page, setPage] = useState<number>(1);
 
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
 
   const busca = search.get("search");
+  const categoria = search.get("categoria");
+  const tag = search.get("tag");
 
   const treinamentoQuery = useGetTreinamentos({
     search: search.get("search") ?? "",
     tag_id: search.get("tag_id") ?? "",
     categoria_id: search.get("categoria_id") ?? "",
     dependent: false,
+    page: page ?? null,
   });
 
-  useEffect(() => {
+  const _nextPage =
+    treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
+  const _nextPageParams = new URLSearchParams(_nextPage);
+  const nextPage = _nextPageParams.get("page") ?? undefined;
+
+  const submitFiltrar = () => {
     setSearchParams({
       search: search.get("search") ?? "",
       categoria_id: selectedCategoria,
       tag_id: selectedTag,
     });
-  }, [selectedCategoria, selectedTag]);
+    treinamentoQuery.refetch();
+  };
+
+  const submitLimpar = () => {
+    setSelectedCategoria("");
+    setSelectedTag("");
+    setSearchParams({
+      search: search.get("search") ?? "",
+      categoria_id: "",
+      tag_id: "",
+    });
+    treinamentoQuery.refetch();
+  };
+
+  useEffect(() => {
+    if (categoria) {
+      console.log("categoria", categoria);
+      setSelectedCategoria(categoria);
+    }
+    if (tag) {
+      setSelectedTag(tag);
+    }
+    treinamentoQuery.refetch();
+  }, []);
 
   return (
     <div>
@@ -87,11 +122,14 @@ const Busca = () => {
               </SelectContent>
             </Select>
 
-            <button onClick={() => treinamentoQuery.refetch()}>Filtrar</button>
+            <Button onClick={submitFiltrar}>Filtrar</Button>
+            <Button variant={"destructive"} onClick={submitLimpar}>
+              Limpar
+            </Button>
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-10 w-full">
         {treinamentoQuery.data?.treinamentos.map((treinamento) => {
           return (
             <TreinamentoView
@@ -103,24 +141,17 @@ const Busca = () => {
               data_publicacao={treinamento.data_publicacao}
               resumo={treinamento.resumo}
               id={treinamento.id}
+              categoria={treinamento.categoria}
             />
           );
         })}
 
-        <div className="flex flex-col gap-10 ms-8">
-          {/* {treinamentoQuery.data?.treinamentos.map((treinamento) => {
-            const a = treinamento.tags.map((tag) => tag.titulo).join(", ");
-            const allTitles = new Set([a]);
-            const uniqueTitles = Array.from(allTitles);
-          })} */}
-
-          <div className="relative mt-11"></div>
-
-          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+        <div className="flex flex-col gap-10">
+          <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3">
             <div className="flex flex-1 justify-between sm:hidden">
               <a
                 href="#"
-                className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="relative inline-flex items-center rounded-md border border-gray-300 bg-white  py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 Anterior
               </a>
@@ -134,70 +165,61 @@ const Busca = () => {
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  Mostrando <span className="font-medium">1</span> de{" "}
-                  <span className="font-medium">10</span> de{" "}
-                  <span className="font-medium">97</span> resultados
+                  Mostrando{" "}
+                  <span className="font-medium">
+                    {treinamentoQuery.data?.treinamentos.length}
+                  </span>{" "}
+                  de {treinamentoQuery.data?.meta.pagination.total_objects}{" "}
+                  resultados
                 </p>
               </div>
-              <div>
-                <nav
-                  aria-label="Pagination"
-                  className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+              <div className="flex gap-2">
+                <div
+                  className={cn(
+                    "rounded-full h-6 w-6 flex items-center justify-center",
+                    {
+                      "bg-pmmBlue text-white cursor-pointer":
+                        treinamentoQuery.data?.meta.pagination.links.first !==
+                        treinamentoQuery.data?.meta.pagination.links.last,
+                    }
+                  )}
                 >
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    <span className="sr-only">Previous</span>
-                  </a>
-                  {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    2
-                  </a>
-                  <a
-                    href="#"
-                    className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-                  >
-                    3
-                  </a>
-                  <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
-                    ...
-                  </span>
-                  <a
-                    href="#"
-                    className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-                  >
-                    8
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    9
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    10
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    <span className="sr-only">Próximo</span>
-                  </a>
-                </nav>
+                  <BiArrowToLeft />
+                </div>
+                <div
+                  className={cn(
+                    "rounded-full h-6 w-6 flex items-center justify-center",
+                    {
+                      "bg-pmmBlue text-white cursor-pointer":
+                        treinamentoQuery.data?.meta.pagination.links.next,
+                    }
+                  )}
+                >
+                  <BiArrowToRight />
+                </div>
+                <div
+                  onClick={() => {
+                    setSearchParams({
+                      search: search.get("search") ?? "",
+                      categoria_id: selectedCategoria,
+                      tag_id: selectedTag,
+                      page: nextPage,
+                    });
+                    treinamentoQuery.refetch();
+                  }}
+                  className={cn(
+                    "rounded-full h-6 w-6 flex items-center justify-center",
+                    {
+                      "bg-pmmBlue text-white cursor-pointer":
+                        treinamentoQuery.data?.meta.pagination.links.next,
+                    }
+                  )}
+                >
+                  <BiArrowToRight />
+                </div>
+                <div className="rounded-full h-6 w-6 flex items-center justify-center">
+                  <BiArrowToRight />
+                </div>
               </div>
             </div>
           </div>

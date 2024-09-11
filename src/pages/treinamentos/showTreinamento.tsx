@@ -6,6 +6,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import TreinamentoRelacionado from "@/components/partials/treinamentoRelacionado";
+import { BASE_URL } from "@/utils/consts";
 
 const ShowTreinamento = () => {
   const { id } = useParams();
@@ -17,6 +18,11 @@ const ShowTreinamento = () => {
   return (
     <div>
       <div className="flex flex-col gap-2">
+        <img
+          src={`${BASE_URL}${data?.treinamento.capa.url}`}
+          alt=""
+          className="max-h-[280px] object-cover"
+        />
         <div className="w-8 h-1 bg-green-600 rounded-full"></div>
         <span className="uppercase text-pmmBlue text-xs font-bold">
           Treinamentos
