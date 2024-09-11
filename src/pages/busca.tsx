@@ -37,26 +37,12 @@ const Busca = () => {
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
 
-  const busca = search.get("search");
-  const categoria = search.get("categoria");
-  const tag = search.get("tag");
-
   const treinamentoQuery = useGetTreinamentos({
     search: search.get("search") ?? "",
     tag_id: search.get("tag_id") ?? "",
     categoria_id: search.get("categoria_id") ?? "",
     page: page ?? 1,
   });
-
-  const _nextPage =
-    treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
-  const _nextPageParams = new URLSearchParams(_nextPage);
-  const nextPage = _nextPageParams.get("page") ?? undefined;
-
-  const _lastPage =
-    treinamentoQuery.data?.meta.pagination.links.last.split("?")[1];
-  const _lastPageParams = new URLSearchParams(_lastPage);
-  const lastPage = _lastPageParams.get("page") ?? undefined;
 
   const submitFiltrar = () => {
     setSearchParams({
@@ -90,6 +76,28 @@ const Busca = () => {
     }
     treinamentoQuery.refetch();
   }, []);
+
+  const busca = search.get("search");
+  const categoria = search.get("categoria");
+  const tag = search.get("tag");
+
+  const _nextPage =
+    treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
+  const _nextPageParams = new URLSearchParams(_nextPage);
+  const nextPage = _nextPageParams.get("page") ?? undefined;
+
+  const _lastPage =
+    treinamentoQuery.data?.meta.pagination.links.last.split("?")[1];
+  const _lastPageParams = new URLSearchParams(_lastPage);
+  const lastPage = _lastPageParams.get("page") ?? undefined;
+
+  const totalRows =
+    page === treinamentoQuery.data?.meta.pagination.total_pages
+      ? treinamentoQuery.data?.meta.pagination.total_objects
+      : page * treinamentoQuery.data?.meta.pagination.per_page!;
+
+  const firstRowIndex =
+    (page - 1) * treinamentoQuery.data?.meta.pagination.per_page! + 1;
 
   return (
     <div>
@@ -181,23 +189,7 @@ const Busca = () => {
                 <p className="text-sm text-gray-700">
                   Mostrando{" "}
                   <span className="font-medium">
-                    {/* show range of the first item to the last according to pagination offset */}
-                    {`${
-                      page ===
-                      treinamentoQuery.data?.meta.pagination.total_pages
-                        ? (page - 1) *
-                            treinamentoQuery.data?.meta.pagination.per_page +
-                          1
-                        : (page - 1) *
-                            treinamentoQuery.data?.meta.pagination.per_page! +
-                          1
-                    }-${
-                      page ===
-                      treinamentoQuery.data?.meta.pagination.total_pages
-                        ? treinamentoQuery.data?.meta.pagination.total_objects
-                        : page *
-                          treinamentoQuery.data?.meta.pagination.per_page!
-                    }`}{" "}
+                    {`${firstRowIndex}-${totalRows}`}{" "}
                   </span>{" "}
                   de {treinamentoQuery.data?.meta.pagination.total_objects}{" "}
                   resultados
