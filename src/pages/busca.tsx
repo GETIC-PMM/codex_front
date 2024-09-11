@@ -15,8 +15,14 @@ import {
   useGetTreinamentos,
 } from "@/utils/queries";
 import { Button } from "@/components/ui/button";
-import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
+import {
+  BiArrowToLeft,
+  BiArrowToRight,
+  BiLeftArrowAlt,
+  BiRightArrowAlt,
+} from "react-icons/bi";
 import { cn } from "@/lib/utils";
+import { parseSearchParams } from "@/utils/functions";
 
 const Busca = () => {
   const [search, setSearchParams] = useSearchParams();
@@ -24,7 +30,9 @@ const Busca = () => {
   const [selectedCategoria, setSelectedCategoria] = useState(
     search.get("categoria_id") ?? ""
   );
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(
+    search.get("page") ? Number(search.get("page")) : 1
+  );
 
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
@@ -37,13 +45,18 @@ const Busca = () => {
     search: search.get("search") ?? "",
     tag_id: search.get("tag_id") ?? "",
     categoria_id: search.get("categoria_id") ?? "",
-    page: page,
+    page: page ?? 1,
   });
 
   const _nextPage =
     treinamentoQuery.data?.meta.pagination.links.next?.split("?")[1];
   const _nextPageParams = new URLSearchParams(_nextPage);
   const nextPage = _nextPageParams.get("page") ?? undefined;
+
+  const _lastPage =
+    treinamentoQuery.data?.meta.pagination.links.last.split("?")[1];
+  const _lastPageParams = new URLSearchParams(_lastPage);
+  const lastPage = _lastPageParams.get("page") ?? undefined;
 
   const submitFiltrar = () => {
     setSearchParams({
@@ -70,7 +83,6 @@ const Busca = () => {
 
   useEffect(() => {
     if (categoria) {
-      console.log("categoria", categoria);
       setSelectedCategoria(categoria);
     }
     if (tag) {
@@ -169,59 +181,89 @@ const Busca = () => {
                 <p className="text-sm text-gray-700">
                   Mostrando{" "}
                   <span className="font-medium">
-                    {treinamentoQuery.data?.treinamentos.length}
+                    {/* show range of the first item to the last according to pagination offset */}
+                    {`${
+                      page ===
+                      treinamentoQuery.data?.meta.pagination.total_pages
+                        ? (page - 1) *
+                            treinamentoQuery.data?.meta.pagination.per_page +
+                          1
+                        : (page - 1) *
+                            treinamentoQuery.data?.meta.pagination.per_page! +
+                          1
+                    }-${
+                      page ===
+                      treinamentoQuery.data?.meta.pagination.total_pages
+                        ? treinamentoQuery.data?.meta.pagination.total_objects
+                        : page *
+                          treinamentoQuery.data?.meta.pagination.per_page!
+                    }`}{" "}
                   </span>{" "}
                   de {treinamentoQuery.data?.meta.pagination.total_objects}{" "}
                   resultados
                 </p>
               </div>
               <div className="flex gap-2">
-                <div
+                <button
+                  onClick={() => {
+                    setSearchParams((s) => ({
+                      ...parseSearchParams(s),
+                      page: "1",
+                    }));
+                    setPage(1);
+                  }}
+                  disabled={page === 1}
                   className={cn(
-                    "rounded-full h-6 w-6 flex items-center justify-center",
-                    {
-                      "bg-pmmBlue text-white cursor-pointer":
-                        treinamentoQuery.data?.meta.pagination.links.first !==
-                        treinamentoQuery.data?.meta.pagination.links.last,
-                    }
+                    "rounded-full h-6 w-6 flex items-center justify-center disabled:cursor-default text-white bg-pmmBlue disabled:opacity-50 disabled:text-black disabled:bg-transparent"
                   )}
                 >
                   <BiArrowToLeft />
-                </div>
-                <div
-                  className={cn(
-                    "rounded-full h-6 w-6 flex items-center justify-center",
-                    {
-                      "bg-pmmBlue text-white cursor-pointer":
-                        treinamentoQuery.data?.meta.pagination.links.next,
-                    }
-                  )}
-                >
-                  <BiArrowToRight />
-                </div>
-                <div
+                </button>
+                <button
                   onClick={() => {
-                    setSearchParams({
-                      search: search.get("search") ?? "",
-                      categoria_id: selectedCategoria,
-                      tag_id: selectedTag,
-                      page: nextPage,
-                    });
-                    treinamentoQuery.refetch();
+                    setSearchParams((s) => ({
+                      ...parseSearchParams(s),
+                      page: String(page - 1),
+                    }));
+                    setPage(page - 1);
                   }}
+                  disabled={page === 1}
                   className={cn(
-                    "rounded-full h-6 w-6 flex items-center justify-center",
-                    {
-                      "bg-pmmBlue text-white cursor-pointer":
-                        treinamentoQuery.data?.meta.pagination.links.next,
-                    }
+                    "rounded-full h-6 w-6 flex items-center justify-center disabled:cursor-default text-white bg-pmmBlue disabled:opacity-50 disabled:text-black disabled:bg-transparent"
+                  )}
+                >
+                  <BiLeftArrowAlt />
+                </button>
+                <button
+                  onClick={() => {
+                    setSearchParams((s) => ({
+                      ...parseSearchParams(s),
+                      page: nextPage ?? "",
+                    }));
+                    setPage(Number(nextPage));
+                  }}
+                  disabled={!nextPage}
+                  className={cn(
+                    "rounded-full h-6 w-6 flex items-center justify-center disabled:cursor-default text-white bg-pmmBlue disabled:opacity-50 disabled:text-black disabled:bg-transparent"
+                  )}
+                >
+                  <BiRightArrowAlt />
+                </button>
+                <button
+                  onClick={() => {
+                    setSearchParams((s) => ({
+                      ...parseSearchParams(s),
+                      page: lastPage ?? "",
+                    }));
+                    setPage(Number(lastPage));
+                  }}
+                  disabled={page === Number(lastPage)}
+                  className={cn(
+                    "rounded-full h-6 w-6 flex items-center justify-center disabled:cursor-default text-white bg-pmmBlue disabled:opacity-50 disabled:text-black disabled:bg-transparent"
                   )}
                 >
                   <BiArrowToRight />
-                </div>
-                <div className="rounded-full h-6 w-6 flex items-center justify-center">
-                  <BiArrowToRight />
-                </div>
+                </button>
               </div>
             </div>
           </div>
