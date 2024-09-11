@@ -9,6 +9,7 @@ import Categorias from "@/pages/categorias/categorias";
 import NovoTreinamento from "@/pages/treinamentos/new";
 import Tags from "@/pages/tags/tags";
 import ShowTreinamento from "@/pages/treinamentos/showTreinamento";
+import Sobre from "@/pages/sobre";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
         path: "/treinamento/:id",
         element: <ShowTreinamento />,
       },
+      {
+        path:"/sobre",
+        element: <Sobre />,
+      }
     ],
   },
   {

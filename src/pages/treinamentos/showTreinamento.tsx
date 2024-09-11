@@ -14,7 +14,7 @@ const ShowTreinamento = () => {
   const { data: treinamentosRelacionados } = useGetTreinamentosByCategoria(
     data?.treinamento.categoria.id
   );
-  console.log({ data: data });
+  
   return (
     <div>
       <div className="flex flex-col gap-2">

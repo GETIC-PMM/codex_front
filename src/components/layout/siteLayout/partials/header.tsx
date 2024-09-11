@@ -25,7 +25,7 @@ const Header = () => {
   }
 
   return (
-    <div className="flex justify-between w-full py-5 mb-10">
+    <div className="flex justify-between w-full py-5 ">
       <div className="flex gap-10">
         <a href="/">
           <img src={DiretiLogo} width={250} alt="Direti Logo" />
@@ -47,7 +47,7 @@ const Header = () => {
           </form>
       </div>
       <div className="flex gap-16 items-center text-pmmGray">
-        <a href="/login">Sobre a DIRETI</a>
+        <a href="/sobre">Sobre a DIRETI</a>
         <a href="/register">Treinamentos</a>
         <a
           href="/painel"
