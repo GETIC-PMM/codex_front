@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import TreinamentoView from "../components/partials/treinamento";
+import TreinamentoCard from "../components/partials/treinamentoCard";
 import {
   Select,
   SelectContent,
@@ -24,7 +24,7 @@ const Busca = () => {
   const [selectedCategoria, setSelectedCategoria] = useState(
     search.get("categoria_id") ?? ""
   );
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState(1);
 
   const categorias = useGetCategorias({ per_page: "all" });
   const tags = useGetTags({ per_page: "all" });
@@ -37,8 +37,7 @@ const Busca = () => {
     search: search.get("search") ?? "",
     tag_id: search.get("tag_id") ?? "",
     categoria_id: search.get("categoria_id") ?? "",
-    dependent: false,
-    page: page ?? null,
+    page: page,
   });
 
   const _nextPage =
@@ -63,8 +62,11 @@ const Busca = () => {
       categoria_id: "",
       tag_id: "",
     });
-    treinamentoQuery.refetch();
   };
+
+  useEffect(() => {
+    treinamentoQuery.refetch();
+  }, [search]);
 
   useEffect(() => {
     if (categoria) {
@@ -132,7 +134,7 @@ const Busca = () => {
       <div className="flex flex-col gap-10 w-full">
         {treinamentoQuery.data?.treinamentos.map((treinamento) => {
           return (
-            <TreinamentoView
+            <TreinamentoCard
               key={treinamento.id}
               tags={treinamento.tags}
               capa={treinamento.capa}

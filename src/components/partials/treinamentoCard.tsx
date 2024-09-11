@@ -1,9 +1,9 @@
 import { Tag } from "@/utils/types";
 import dayjs from "dayjs";
 import { BASE_URL } from "@/utils/consts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-const TreinamentoView = ({
+const TreinamentoCard = ({
   tags,
   capa,
   titulo,
@@ -23,6 +23,7 @@ const TreinamentoView = ({
   categoria: { id: string; titulo: string };
 }) => {
   const navigate = useNavigate();
+  const [_, setSearch] = useSearchParams();
   return (
     <div className="flex w-full gap-10">
       <img
@@ -36,22 +37,22 @@ const TreinamentoView = ({
       <div className="flex-[2] ">
         <div className="flex flex-col w-full">
           <div className="flex justify-between gap-2 mt-2">
-            <a
+            <button
+              onClick={() => setSearch(() => ({ categoria_id: categoria.id }))}
               className="font-bold hover:underline cursor-pointer text-green-700 text-xs"
-              href={`/busca?categoria_id=${categoria.id}`}
             >
               {categoria.titulo}
-            </a>
+            </button>
 
             <div className="flex gap-4 text-xs">
               {tags.map((tag) => {
                 return (
-                  <a
-                    href={`/busca?tag_id=${tag.id}`}
+                  <button
+                    onClick={() => setSearch(() => ({ tag_id: tag.id }))}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-10 rounded-full hover:underline"
                   >
                     {tag.titulo}
-                  </a>
+                  </button>
                 );
               })}
             </div>
@@ -86,4 +87,4 @@ const TreinamentoView = ({
     </div>
   );
 };
-export default TreinamentoView;
+export default TreinamentoCard;
