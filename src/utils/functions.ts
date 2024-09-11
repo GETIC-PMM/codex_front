@@ -24,3 +24,8 @@ export default function useWindowDimensions() {
 
   return windowDimensions;
 }
+
+export const parseSearchParams = (search: URLSearchParams) => {
+  const params = Object.fromEntries(search.entries());
+  return params;
+};
